@@ -37,3 +37,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
 // chat bot
 Route::post('/chatbot/responder', [App\Http\Controllers\ChatbotController::class, 'responder'])->name('chatbot.responder')->middleware('auth');
+
+// cita
+Route::middleware(['auth'])->prefix('paciente')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Paciente\DashboardController::class, 'index'])->name('paciente.dashboard');
+    Route::get('/citas', [App\Http\Controllers\Paciente\CitaController::class, 'index'])->name('paciente.citas');
+});
