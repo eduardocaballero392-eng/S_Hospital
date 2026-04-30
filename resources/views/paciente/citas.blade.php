@@ -26,7 +26,7 @@
                 <div class="user-role">Paciente</div>
             </div>
             <div class="avatar">{{ strtoupper(substr($usuario->nombre, 0, 1)) }}</div>
-            <a href="{{ route('paciente.dashboard') }}" class="btn-back">← Volver</a>
+            <a href="{{ route('paciente.dashboard') }}" class="btn-back"> Volver</a>
         </div>
     </nav>
 
@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="resumen-fecha" id="resumenFecha" style="display:none">
-                    <div class="resumen-icon">📅</div>
+                    <div class="resumen-icon"></div>
                     <div>
                         <div class="resumen-fecha-txt" id="resumenFechaTxt"></div>
                         <div class="resumen-hora-txt" id="resumenHoraTxt"></div>
@@ -112,13 +112,13 @@
                     </div>
 
                     <button type="button" onclick="agendarCita()" class="btn-agendar" id="btnAgendar">
-                        ✓ Confirmar cita
+                         Confirmar cita
                     </button>
                 </form>
 
                 {{-- CONFIRMACION --}}
                 <div class="confirmacion" id="confirmacion" style="display:none">
-                    <div class="confirmacion-icon">✅</div>
+                    <div class="confirmacion-icon"></div>
                     <h3>¡Cita agendada!</h3>
                     <p>Tu cita ha sido registrada exitosamente.</p>
                     <div class="confirmacion-detalle" id="confirmacionDetalle"></div>
@@ -195,7 +195,7 @@
 
             document.getElementById('resumenFecha').style.display = 'flex';
             document.getElementById('resumenFechaTxt').textContent = `${day} de ${mes} de ${year}`;
-            document.getElementById('resumenHoraTxt').textContent = `🕐 ${hora} hrs`;
+            document.getElementById('resumenHoraTxt').textContent = ` ${hora} hrs`;
         }
 
         function agendarCita() {
@@ -218,11 +218,11 @@
             const salaNombre = document.getElementById('salaSelect').options[document.getElementById('salaSelect').selectedIndex].text;
 
             document.getElementById('confirmacionDetalle').innerHTML = `
-                <p>📅 Fecha: <strong>${fechaSeleccionada} a las ${horaSeleccionada}</strong></p>
-                <p>👨‍⚕️ Médico: <strong>${medicoNombre}</strong></p>
-                <p>🏥 Sala: <strong>${salaNombre}</strong></p>
-                <p>📋 Tipo: <strong>${tipo}</strong></p>
-                <p>📝 Motivo: <strong>${motivo}</strong></p>
+                <p> Fecha: <strong>${fechaSeleccionada} a las ${horaSeleccionada}</strong></p>
+                <p> Médico: <strong>${medicoNombre}</strong></p>
+                <p> Sala: <strong>${salaNombre}</strong></p>
+                <p> Tipo: <strong>${tipo}</strong></p>
+                <p> Motivo: <strong>${motivo}</strong></p>
             `;
         }
 

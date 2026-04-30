@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 
 function Example() {
     return (
@@ -8,8 +8,9 @@ function Example() {
                 <div className="col-md-8">
                     <div className="card">
                         <div className="card-header">Example Component</div>
-
-                        <div className="card-body">I'm an example component!</div>
+                        <div className="card-body">
+                            I'm an example component!
+                        </div>
                     </div>
                 </div>
             </div>
@@ -19,12 +20,9 @@ function Example() {
 
 export default Example;
 
-if (document.getElementById('example')) {
-    const Index = ReactDOM.createRoot(document.getElementById("example"));
-
-    Index.render(
-        <React.StrictMode>
-            <Example/>
-        </React.StrictMode>
-    )
+// Montaje automático si existe el elemento 'example'
+const exampleElement = document.getElementById('example');
+if (exampleElement) {
+    const root = createRoot(exampleElement);
+    root.render(<Example />);
 }

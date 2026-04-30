@@ -6,6 +6,7 @@
     <title>Principal</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    
 </head>
 <body class="dash">
 
@@ -50,53 +51,48 @@
 
        
 
-        {{-- ACCIONES RAPIDAS --}}
-        <div class="section-label">Acciones rápidas</div>
-        <div class="actions-grid">
-            
-            <a href="{{ route('paciente.citas') }}" class="action-card">
-                <div class="ac-icon aci-blue">
-                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01"/></svg>
-                </div>
-                <div class="ac-text"><div class="ac-title">Agendar cita</div><div class="ac-sub">Programa tu próxima consulta</div></div>
-                <div class="ac-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-            </a>
-            <a href="#" class="action-card">
-                <div class="ac-icon aci-green">
-                    <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                </div>
-                <div class="ac-text"><div class="ac-title">Mis diagnósticos</div><div class="ac-sub">Ver historial clínico</div></div>
-                <div class="ac-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-            </a>
-            <a href="#" class="action-card">
-                <div class="ac-icon aci-amber">
-                    <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 5h6M12 12v4M10 14h4"/></svg>
-                </div>
-                <div class="ac-text"><div class="ac-title">Mis recetas</div><div class="ac-sub">Ver recetas médicas activas</div></div>
-                <div class="ac-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-            </a>
-            <a href="#" class="action-card">
-                <div class="ac-icon aci-teal">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                </div>
-                <div class="ac-text"><div class="ac-title">Mis resultados</div><div class="ac-sub">Ver resultados de exámenes</div></div>
-                <div class="ac-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-            </a>
-            <a href="#" class="action-card">
-                <div class="ac-icon aci-coral">
-                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                </div>
-                <div class="ac-text"><div class="ac-title">Solicitar servicio</div><div class="ac-sub">Pedir servicios hospitalarios</div></div>
-                <div class="ac-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-            </a>
-            <a href="#" class="action-card">
-                <div class="ac-icon aci-purple">
-                    <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                </div>
-                <div class="ac-text"><div class="ac-title">Mi perfil</div><div class="ac-sub">Actualizar datos personales</div></div>
-                <div class="ac-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-            </a>
+       {{-- ACCIONES RAPIDAS --}}
+<div class="section-label">Acciones rápidas</div>
+<div class="actions-grid">
+
+    {{-- Agendar cita --}}
+    <a href="{{ route('paciente.citas') }}" class="action-card">
+        <div class="ac-icon aci-blue">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01"/></svg>
         </div>
+        <div class="ac-text"><div class="ac-title">Agendar cita</div><div class="ac-sub">Programa tu próxima consulta</div></div>
+        <div class="ac-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    </a>
+
+    {{-- Mis diagnósticos --}}
+    <a href="{{ route('paciente.diagnosticos') }}" class="action-card">
+        <div class="ac-icon aci-green">
+            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="ac-text"><div class="ac-title">Mis diagnósticos</div><div class="ac-sub">Ver historial clínico</div></div>
+        <div class="ac-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    </a>
+
+    {{-- Mis recetas --}}
+    <a href="{{ route('paciente.recetas') }}" class="action-card">
+        <div class="ac-icon aci-amber">
+            <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2M9 5h6M12 12v4M10 14h4"/></svg>
+        </div>
+        <div class="ac-text"><div class="ac-title">Mis recetas</div><div class="ac-sub">Ver recetas médicas activas</div></div>
+        <div class="ac-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    </a>
+
+    {{-- Mis resultados --}}
+     <a href="{{ route('paciente.resultados') }}" class="action-card">
+        <div class="ac-icon aci-teal">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="ac-text"><div class="ac-title">Mis resultados</div><div class="ac-sub">Ver resultados de exámenes</div></div>
+        <div class="ac-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    </a>
+
+
+</div>
 
         {{-- BOTTOM ROW --}}
         <div class="bottom-row">
