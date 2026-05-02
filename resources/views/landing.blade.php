@@ -42,8 +42,8 @@
                     <i class="fab fa-facebook-f"></i>
                 </a>
             </div>
-            <a href="{{ url('/resultados') }}" class="btn btn--filled">Resultados en línea</a>
-            <a href="{{ route('login') }}" class="btn btn--outline">Agenda una cita</a>
+            <a href="{{ route('login') }}" class="btn btn--filled">Resultados en línea</a>
+            <a href="{{ route('paciente.citas') }}" class="btn btn--outline">Agenda una cita</a>
         </div>
     </div>
 </nav>
@@ -209,7 +209,7 @@
                 <li><span class="bullet-check">✓</span> Equipos e instrumentos de última generación</li>
             </ul>
         </div>
-        <a href="{{ route('login') }}" class="btn-cta">Agenda tu cita</a>
+        <a href="{{ route('paciente.citas') }}" class="btn-cta">Agenda tu cita</a>
     </div>
 </section>
 
@@ -349,4 +349,5 @@
 </a>
 
 </body>
+
 </html>

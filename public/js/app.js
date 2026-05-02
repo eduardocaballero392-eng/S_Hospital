@@ -5489,7 +5489,7 @@ var Landing = function Landing() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
               className: "btn-secondary",
               onClick: function onClick() {
-                return window.location.href = '/login';
+                return window.location.href = '/citas';
               },
               children: "\uD83D\uDCCB Agenda una cita"
             })]
@@ -5702,7 +5702,7 @@ var Landing = function Landing() {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
       className: "floating-btn",
       onClick: function onClick() {
-        return window.location.href = '/login';
+        return window.location.href = '/citas';
       },
       children: "\uD83D\uDCCB Agendar Cita"
     })]
@@ -10204,6 +10204,19 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************!*\
   !*** ./resources/sass/landing.scss ***!
   \*************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ },
+
+/***/ "./resources/sass/paciente/agenda_cita.scss"
+/*!**************************************************!*\
+  !*** ./resources/sass/paciente/agenda_cita.scss ***!
+  \**************************************************/
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45331,6 +45344,7 @@ if (false) // removed by dead control flow
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			"/js/app": 0,
+/******/ 			"css/agenda_cita": 0,
 /******/ 			"css/landing": 0,
 /******/ 			"css/app": 0
 /******/ 		};
@@ -45382,9 +45396,10 @@ if (false) // removed by dead control flow
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/landing","css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	__webpack_require__.O(undefined, ["css/landing","css/app"], () => (__webpack_require__("./resources/sass/app.scss")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/landing","css/app"], () => (__webpack_require__("./resources/sass/landing.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./resources/sass/app.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./resources/sass/landing.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./resources/sass/paciente/agenda_cita.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

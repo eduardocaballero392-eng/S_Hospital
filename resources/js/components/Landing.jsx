@@ -82,7 +82,7 @@ const Landing = () => {
                             <button className="btn-primary" onClick={() => window.location.href = '/resultados'}>
                                 📊 Resultados en línea
                             </button>
-                            <button className="btn-secondary" onClick={() => window.location.href = '/login'}>
+                            <button className="btn-secondary" onClick={() => window.location.href = '/citas'}>
                                 📋 Agenda una cita
                             </button>
                         </div>
@@ -198,11 +198,13 @@ const Landing = () => {
             </footer>
 
             {/* Botón flotante */}
-            <button className="floating-btn" onClick={() => window.location.href = '/login'}>
+            <button className="floating-btn" onClick={() => window.location.href = '/citas'}>
                 📋 Agendar Cita
             </button>
         </div>
     );
 };
+
+
 
 export default Landing;

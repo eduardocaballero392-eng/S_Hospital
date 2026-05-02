@@ -3,231 +3,462 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendar Cita</title>
+    <title>B&L Laboratorio | Agenda tu Cita</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/agenda_cita.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body class="dash">
+<body>
+
+<div class="citas-container">
 
     {{-- NAVBAR --}}
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <div class="brand-icon">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2">
-                    <rect x="11" y="2" width="2" height="20" rx="1"/>
-                    <rect x="2" y="11" width="20" height="2" rx="1"/>
-                </svg>
+    <nav class="navbar-citas">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-main">B&L</span>
+                    <span class="logo-sub">Laboratorio</span>
+                </div>
             </div>
-            <span class="brand-name">Clínica<span>Salud</span></span>
-        </div>
-        <div class="nav-right">
-            <div class="user-info">
-                <div class="user-name">{{ $usuario->nombre }}</div>
-                <div class="user-role">Paciente</div>
+            <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
+            <div class="nav-links" id="navLinks">
+                <a href="{{ url('/') }}"><i class="fas fa-home"></i> Inicio</a>
+                @auth
+                    <a href="{{ route('paciente.dashboard') }}"><i class="fas fa-th-large"></i> Dashboard</a>
+                    <a href="{{ route('paciente.resultados') }}"><i class="fas fa-file-medical"></i> Resultados</a>
+                    <form method="POST" action="{{ route('logout') }}" class="nav-logout">
+                        @csrf
+                        <button type="submit"><i class="fas fa-sign-out-alt"></i> Salir</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a>
+                @endauth
             </div>
-            <div class="avatar">{{ strtoupper(substr($usuario->nombre, 0, 1)) }}</div>
-            <a href="{{ route('paciente.dashboard') }}" class="btn-back"> Volver</a>
         </div>
     </nav>
 
-    <div class="main">
-        <div class="citas-wrapper">
-
-            {{-- CALENDARIO --}}
-            <div class="calendario-panel">
-                <div class="panel-header">
-                    <div class="panel-title">📅 Selecciona una fecha</div>
-                </div>
-
-                <div class="calendar">
-                    <div class="calendar-header">
-                        <button onclick="cambiarMes(-1)" class="cal-nav">‹</button>
-                        <span id="mesAnio"></span>
-                        <button onclick="cambiarMes(1)" class="cal-nav">›</button>
-                    </div>
-                    <div class="calendar-days">
-                        <span>Dom</span><span>Lun</span><span>Mar</span>
-                        <span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span>
-                    </div>
-                    <div class="calendar-grid" id="calendarGrid"></div>
-                </div>
-
-                {{-- HORARIOS --}}
-                <div class="horarios-section" id="horariosSection" style="display:none">
-                    <div class="section-label">Selecciona un horario</div>
-                    <div class="horarios-grid" id="horariosGrid"></div>
-                </div>
+    {{-- PROGRESS STEPS --}}
+    <div class="progress-wrapper">
+        <div class="progress-steps">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Datos Personales</div>
             </div>
-
-            {{-- FORMULARIO --}}
-            <div class="form-panel">
-                <div class="panel-header">
-                    <div class="panel-title">📋 Datos de la cita</div>
-                </div>
-
-                <div class="resumen-fecha" id="resumenFecha" style="display:none">
-                    <div class="resumen-icon"></div>
-                    <div>
-                        <div class="resumen-fecha-txt" id="resumenFechaTxt"></div>
-                        <div class="resumen-hora-txt" id="resumenHoraTxt"></div>
-                    </div>
-                </div>
-
-                <form id="formCita">
-                    <div class="form-group">
-                        <label class="form-label">Médico</label>
-                        <select class="form-select" id="medicoSelect">
-                            <option value="">Selecciona un médico</option>
-                            <option value="1">Dr. Ramírez López - Cardiología</option>
-                            <option value="2">Dra. Torres Vega - Medicina General</option>
-                            <option value="3">Dr. Herrera Cruz - Neurología</option>
-                            <option value="4">Dra. Silva Mora - Pediatría</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Sala</label>
-                        <select class="form-select" id="salaSelect">
-                            <option value="">Selecciona una sala</option>
-                            <option value="1">Sala 101 - Piso 1</option>
-                            <option value="2">Sala 202 - Piso 2</option>
-                            <option value="3">Sala 303 - Piso 3</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Tipo de consulta</label>
-                        <select class="form-select" id="tipoSelect">
-                            <option value="">Selecciona el tipo</option>
-                            <option value="consulta">Consulta general</option>
-                            <option value="seguimiento">Seguimiento</option>
-                            <option value="urgencia">Urgencia</option>
-                            <option value="especialidad">Especialidad</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Motivo de la consulta</label>
-                        <textarea class="form-textarea" id="motivoInput" placeholder="Describe brevemente el motivo de tu consulta..." rows="4"></textarea>
-                    </div>
-
-                    <button type="button" onclick="agendarCita()" class="btn-agendar" id="btnAgendar">
-                         Confirmar cita
-                    </button>
-                </form>
-
-                {{-- CONFIRMACION --}}
-                <div class="confirmacion" id="confirmacion" style="display:none">
-                    <div class="confirmacion-icon"></div>
-                    <h3>¡Cita agendada!</h3>
-                    <p>Tu cita ha sido registrada exitosamente.</p>
-                    <div class="confirmacion-detalle" id="confirmacionDetalle"></div>
-                    <a href="{{ route('paciente.dashboard') }}" class="btn-volver">Volver al inicio</a>
-                </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Motivo y Tipo</div>
             </div>
-
+            <div class="step-line"></div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Fecha y Hora</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">Confirmación</div>
+            </div>
         </div>
     </div>
 
-    <script>
-        let fechaSeleccionada = null;
-        let horaSeleccionada = null;
-        let currentDate = new Date();
+    {{-- FORMULARIO --}}
+    <div class="form-wrapper">
 
-        const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-        const horarios = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30','14:00','14:30','15:00','15:30','16:00','16:30'];
+        @if($errors->any())
+            <div class="alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+            </div>
+        @endif
 
-        function renderCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            document.getElementById('mesAnio').textContent = `${meses[month]} ${year}`;
+        <form id="citaForm" method="POST" action="{{ route('paciente.citas.store') }}">
+            @csrf
 
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const today = new Date();
+            {{-- ===== PASO 1: DATOS PERSONALES ===== --}}
+            <div class="form-step active" id="step1">
+                <div class="step-header">
+                    <div class="step-icon"><i class="fas fa-user-circle"></i></div>
+                    <div>
+                        <h2>Datos Personales</h2>
+                        <p>Ingresa tus datos para la cita</p>
+                    </div>
+                </div>
 
-            let html = '';
-            for (let i = 0; i < firstDay; i++) html += '<div></div>';
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><i class="fas fa-id-card"></i> DNI *</label>
+                        <input type="text" name="dni"
+                               value="{{ auth()->check() ? (auth()->user()->paciente->DNI ?? '') : '' }}"
+                               class="form-control" placeholder="Ej: 12345678" maxlength="8"
+                               {{ auth()->check() && isset(auth()->user()->paciente->DNI) ? 'readonly' : '' }}>
+                    </div>
 
-            for (let day = 1; day <= daysInMonth; day++) {
-                const date = new Date(year, month, day);
-                const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
-                const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-                const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-                const isSelected = fechaSeleccionada === dateStr;
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Nombres *</label>
+                        <input type="text" name="nombres"
+                               value="{{ auth()->check() ? (auth()->user()->paciente->nombre ?? '') : '' }}"
+                               class="form-control" placeholder="Tus nombres"
+                               {{ auth()->check() && isset(auth()->user()->paciente->nombre) ? 'readonly' : '' }}>
+                    </div>
 
-                let cls = 'cal-day';
-                if (isPast || isWeekend) cls += ' disabled';
-                else cls += ' available';
-                if (isSelected) cls += ' selected';
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Apellidos *</label>
+                        <input type="text" name="apellidos"
+                               value="{{ auth()->check() ? (auth()->user()->paciente->apellido ?? '') : '' }}"
+                               class="form-control" placeholder="Tus apellidos"
+                               {{ auth()->check() && isset(auth()->user()->paciente->apellido) ? 'readonly' : '' }}>
+                    </div>
 
-                html += `<div class="${cls}" onclick="${(!isPast && !isWeekend) ? `selectFecha('${dateStr}', ${day}, '${meses[month]}', ${year})` : ''}">${day}</div>`;
-            }
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> Fecha de Nacimiento *</label>
+                        <input type="date" name="fecha_nac"
+                               value="{{ auth()->check() ? (auth()->user()->paciente->fecha_nac ?? '') : '' }}"
+                               class="form-control"
+                               {{ auth()->check() && isset(auth()->user()->paciente->fecha_nac) ? 'readonly' : '' }}>
+                    </div>
 
-            document.getElementById('calendarGrid').innerHTML = html;
-        }
+                    <div class="form-group">
+                        <label><i class="fas fa-venus-mars"></i> Género *</label>
+                        @if(auth()->check() && isset(auth()->user()->paciente->genero))
+                            <input type="text" name="genero"
+                                   value="{{ auth()->user()->paciente->genero }}"
+                                   class="form-control" readonly>
+                        @else
+                            <select name="genero" class="form-control">
+                                <option value="">Selecciona tu género</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        @endif
+                    </div>
 
-        function cambiarMes(dir) {
-            currentDate.setMonth(currentDate.getMonth() + dir);
-            renderCalendar();
-        }
+                    <div class="form-group">
+                        <label><i class="fas fa-phone-alt"></i> Teléfono *</label>
+                        <input type="tel" name="telefono" id="telefono"
+                               value="{{ auth()->check() ? (auth()->user()->paciente->telefono ?? '') : '' }}"
+                               class="form-control" placeholder="Ej: 987654321" maxlength="9">
+                    </div>
 
-        function selectFecha(dateStr, day, mes, year) {
-            fechaSeleccionada = dateStr;
-            horaSeleccionada = null;
-            renderCalendar();
+                    <div class="form-group full-width">
+                        <label><i class="fas fa-map-marker-alt"></i> Dirección</label>
+                        <input type="text" name="direccion" id="direccion"
+                               class="form-control" placeholder="Ingresa tu dirección completa">
+                    </div>
 
-            const horariosSection = document.getElementById('horariosSection');
-            horariosSection.style.display = 'block';
+                    <div class="form-group full-width">
+                        <label><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                        <input type="email" name="email" id="email"
+                               value="{{ auth()->check() ? (auth()->user()->email ?? '') : '' }}"
+                               class="form-control" placeholder="correo@ejemplo.com"
+                               {{ auth()->check() && auth()->user()->email ? 'readonly' : '' }}>
+                    </div>
+                </div>
 
-            let html = '';
-            horarios.forEach(h => {
-                const ocupado = Math.random() < 0.3;
-                html += `<div class="horario-btn ${ocupado ? 'ocupado' : ''}" onclick="${!ocupado ? `selectHora('${h}', '${day}', '${mes}', '${year}')` : ''}">${h}</div>`;
-            });
-            document.getElementById('horariosGrid').innerHTML = html;
-        }
+                <div class="form-navigation">
+                    <a href="{{ url('/') }}" class="btn-back-home">
+                        <i class="fas fa-arrow-left"></i> Volver al inicio
+                    </a>
+                    <button type="button" class="btn-next" onclick="nextStep()">
+                        Siguiente <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
 
-        function selectHora(hora, day, mes, year) {
-            horaSeleccionada = hora;
+            {{-- ===== PASO 2: MOTIVO Y TIPO ===== --}}
+            <div class="form-step" id="step2">
+                <div class="step-header">
+                    <div class="step-icon"><i class="fas fa-clipboard-list"></i></div>
+                    <div>
+                        <h2>Motivo y Tipo de Cita</h2>
+                        <p>Cuéntanos el motivo de tu visita</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label><i class="fas fa-stethoscope"></i> Tipo de Cita *</label>
+                        <div class="tipo-grid">
+                            <div class="tipo-card" data-tipo="Laboratorio Clínico">
+                                <div class="tipo-icon"><i class="fas fa-tint"></i></div>
+                                <span>Laboratorio Clínico</span>
+                            </div>
+                            <div class="tipo-card" data-tipo="BYL Genetics">
+                                <div class="tipo-icon"><i class="fas fa-dna"></i></div>
+                                <span>BYL Genetics</span>
+                            </div>
+                            <div class="tipo-card" data-tipo="Laboratorio de Referencia">
+                                <div class="tipo-icon"><i class="fas fa-microscope"></i></div>
+                                <span>Laboratorio de Referencia</span>
+                            </div>
+                            <div class="tipo-card" data-tipo="Atención a Domicilio">
+                                <div class="tipo-icon"><i class="fas fa-home"></i></div>
+                                <span>Atención a Domicilio</span>
+                            </div>
+                        </div>
+                        <input type="hidden" name="tipo" id="tipoSeleccionado">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label><i class="fas fa-comment-medical"></i> Motivo de la Cita *</label>
+                        <textarea name="motivo" id="motivo" class="form-control textarea-motivo"
+                                  placeholder="Describe brevemente el motivo de tu visita. Ej: Análisis de sangre de rutina, control médico, etc."
+                                  maxlength="255"></textarea>
+                        <span class="char-count"><span id="charCount">0</span>/255</span>
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn-prev" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Atrás
+                    </button>
+                    <button type="button" class="btn-next" onclick="nextStep()">
+                        Siguiente <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            {{-- ===== PASO 3: FECHA Y HORA ===== --}}
+            <div class="form-step" id="step3">
+                <div class="step-header">
+                    <div class="step-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <div>
+                        <h2>Fecha y Hora</h2>
+                        <p>Elige el día y horario de tu preferencia</p>
+                    </div>
+                </div>
+
+                <div class="calendario-wrapper">
+                    <div class="calendario-section">
+                        <h3><i class="fas fa-calendar"></i> Selecciona una fecha</h3>
+                        <input type="date" id="fechaCita" class="form-control" min="{{ date('Y-m-d') }}">
+                    </div>
+                    <div class="horarios-section">
+                        <h3><i class="fas fa-clock"></i> Selecciona un horario</h3>
+                        <div class="horarios-grid" id="horariosGrid"></div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="fecha_hora" id="fechaHoraCombinada">
+
+                <div class="form-navigation">
+                    <button type="button" class="btn-prev" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Atrás
+                    </button>
+                    <button type="button" class="btn-next" onclick="nextStep()">
+                        Siguiente <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            {{-- ===== PASO 4: CONFIRMACIÓN ===== --}}
+            <div class="form-step" id="step4">
+                <div class="step-header">
+                    <div class="step-icon success"><i class="fas fa-check-circle"></i></div>
+                    <div>
+                        <h2>Confirmar Cita</h2>
+                        <p>Revisa que todos los datos sean correctos antes de confirmar</p>
+                    </div>
+                </div>
+
+                <div class="resumen-cita">
+                    <div class="resumen-card">
+                        <h3><i class="fas fa-user-md"></i> Datos del Paciente</h3>
+                        <div class="resumen-content" id="resumenPaciente"></div>
+                    </div>
+                    <div class="resumen-card">
+                        <h3><i class="fas fa-clipboard-list"></i> Motivo y Tipo</h3>
+                        <div class="resumen-content" id="resumenMotivo"></div>
+                    </div>
+                    <div class="resumen-card">
+                        <h3><i class="fas fa-calendar-check"></i> Fecha y Hora</h3>
+                        <div class="resumen-content" id="resumenFecha"></div>
+                    </div>
+                </div>
+
+                <div class="aviso-admin">
+                    <i class="fas fa-info-circle"></i>
+                    El médico y sala serán asignados por el administrador una vez confirmada tu cita.
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn-prev" onclick="prevStep()">
+                        <i class="fas fa-arrow-left"></i> Atrás
+                    </button>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-check"></i> Confirmar Cita
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    {{-- MODAL CONFIRMACIÓN --}}
+    @if(session('success'))
+    <div class="modal-confirmacion" id="modalConfirmacion">
+        <div class="modal-box">
+            
+            <h3>¡Cita Confirmada!</h3>
+            <p>{{ session('success') }}</p>
+            <button onclick="window.location.href='/'">
+                <i class="fas fa-home"></i> Ir al inicio
+            </button>
+        </div>
+    </div>
+    @endif
+
+</div>
+
+<script>
+let currentStep = 1;
+const totalSteps = 4;
+let horaSeleccionada = '';
+let fechaSeleccionada = '';
+
+// Hamburger
+document.getElementById('hamburger')?.addEventListener('click', () => {
+    document.getElementById('navLinks')?.classList.toggle('open');
+});
+
+// Tipo de cita
+document.querySelectorAll('.tipo-card').forEach(card => {
+    card.addEventListener('click', function () {
+        document.querySelectorAll('.tipo-card').forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+        document.getElementById('tipoSeleccionado').value = this.dataset.tipo;
+    });
+});
+
+// Contador caracteres
+document.getElementById('motivo')?.addEventListener('input', function () {
+    document.getElementById('charCount').textContent = this.value.length;
+});
+
+// Generar horarios
+function generarHorarios() {
+    const horarios = ['07:00','08:00','09:00','10:00','11:00','12:00','14:00','15:00','16:00','17:00','18:00'];
+    const grid = document.getElementById('horariosGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    horarios.forEach(hora => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'horario-btn';
+        btn.innerText = hora;
+        btn.addEventListener('click', function () {
             document.querySelectorAll('.horario-btn').forEach(b => b.classList.remove('selected'));
-            event.target.classList.add('selected');
+            this.classList.add('selected');
+            horaSeleccionada = hora;
+            actualizarFechaHora();
+        });
+        grid.appendChild(btn);
+    });
+}
 
-            document.getElementById('resumenFecha').style.display = 'flex';
-            document.getElementById('resumenFechaTxt').textContent = `${day} de ${mes} de ${year}`;
-            document.getElementById('resumenHoraTxt').textContent = ` ${hora} hrs`;
+function actualizarFechaHora() {
+    if (fechaSeleccionada && horaSeleccionada) {
+        document.getElementById('fechaHoraCombinada').value = fechaSeleccionada + ' ' + horaSeleccionada + ':00';
+    }
+}
+
+document.getElementById('fechaCita')?.addEventListener('change', function () {
+    fechaSeleccionada = this.value;
+    horaSeleccionada = '';
+    document.querySelectorAll('.horario-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('fechaHoraCombinada').value = '';
+});
+
+// Navegación
+function showStep(step) {
+    for (let i = 1; i <= totalSteps; i++) {
+        document.getElementById(`step${i}`)?.classList.toggle('active', i === step);
+        const ind = document.querySelector(`.step[data-step="${i}"]`);
+        if (ind) {
+            ind.classList.toggle('active', i === step);
+            ind.classList.toggle('done', i < step);
         }
+        const lines = document.querySelectorAll('.step-line');
+        if (lines[i - 1]) lines[i - 1].classList.toggle('done', i < step);
+    }
+    currentStep = step;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (step === 4) actualizarResumen();
+}
 
-        function agendarCita() {
-            const medico = document.getElementById('medicoSelect').value;
-            const sala = document.getElementById('salaSelect').value;
-            const tipo = document.getElementById('tipoSelect').value;
-            const motivo = document.getElementById('motivoInput').value;
+function nextStep() {
+    if (currentStep === 1) {
+        const dni     = document.querySelector('input[name="dni"]')?.value?.trim();
+        const nombres = document.querySelector('input[name="nombres"]')?.value?.trim();
+        const apells  = document.querySelector('input[name="apellidos"]')?.value?.trim();
+        const tel     = document.getElementById('telefono')?.value?.trim();
+        const genero  = document.querySelector('select[name="genero"]')?.value ||
+                        document.querySelector('input[name="genero"]')?.value;
+        if (!dni || dni.length < 8) { alert('Ingresa un DNI válido de 8 dígitos.'); return; }
+        if (!nombres)               { alert('Los nombres son obligatorios.'); return; }
+        if (!apells)                { alert('Los apellidos son obligatorios.'); return; }
+        if (!genero)                { alert('Selecciona tu género.'); return; }
+        if (!tel || tel.length < 9) { alert('Ingresa un teléfono válido de 9 dígitos.'); return; }
+    }
+    if (currentStep === 2) {
+        const tipo   = document.getElementById('tipoSeleccionado')?.value;
+        const motivo = document.getElementById('motivo')?.value?.trim();
+        if (!tipo)   { alert('Por favor selecciona el tipo de cita.'); return; }
+        if (!motivo) { alert('Por favor describe el motivo de tu cita.'); return; }
+    }
+    if (currentStep === 3) {
+        const fh = document.getElementById('fechaHoraCombinada')?.value;
+        if (!fh) { alert('Por favor selecciona una fecha y un horario.'); return; }
+    }
+    if (currentStep < totalSteps) showStep(currentStep + 1);
+}
 
-            if (!fechaSeleccionada) return alert('Selecciona una fecha');
-            if (!horaSeleccionada) return alert('Selecciona un horario');
-            if (!medico) return alert('Selecciona un médico');
-            if (!sala) return alert('Selecciona una sala');
-            if (!tipo) return alert('Selecciona el tipo de consulta');
-            if (!motivo) return alert('Escribe el motivo de la consulta');
+function prevStep() {
+    if (currentStep > 1) showStep(currentStep - 1);
+}
 
-            document.getElementById('formCita').style.display = 'none';
-            document.getElementById('confirmacion').style.display = 'block';
+function actualizarResumen() {
+    const nombre   = document.querySelector('input[name="nombres"]')?.value || '';
+    const apellido = document.querySelector('input[name="apellidos"]')?.value || '';
+    const dni      = document.querySelector('input[name="dni"]')?.value || '';
+    const tel      = document.getElementById('telefono')?.value || '';
+    const email    = document.getElementById('email')?.value || 'No especificado';
+    const dir      = document.getElementById('direccion')?.value || 'No especificada';
 
-            const medicoNombre = document.getElementById('medicoSelect').options[document.getElementById('medicoSelect').selectedIndex].text;
-            const salaNombre = document.getElementById('salaSelect').options[document.getElementById('salaSelect').selectedIndex].text;
+    document.getElementById('resumenPaciente').innerHTML = `
+        <p><i class="fas fa-user"></i> <strong>${nombre} ${apellido}</strong></p>
+        <p><i class="fas fa-id-card"></i> DNI: ${dni}</p>
+        <p><i class="fas fa-phone"></i> ${tel}</p>
+        <p><i class="fas fa-envelope"></i> ${email}</p>
+        <p><i class="fas fa-map-marker-alt"></i> ${dir}</p>
+    `;
 
-            document.getElementById('confirmacionDetalle').innerHTML = `
-                <p> Fecha: <strong>${fechaSeleccionada} a las ${horaSeleccionada}</strong></p>
-                <p> Médico: <strong>${medicoNombre}</strong></p>
-                <p> Sala: <strong>${salaNombre}</strong></p>
-                <p> Tipo: <strong>${tipo}</strong></p>
-                <p> Motivo: <strong>${motivo}</strong></p>
-            `;
-        }
+    const tipo   = document.getElementById('tipoSeleccionado')?.value || '';
+    const motivo = document.getElementById('motivo')?.value || '';
+    document.getElementById('resumenMotivo').innerHTML = `
+        <p><i class="fas fa-stethoscope"></i> <strong>${tipo}</strong></p>
+        <p><i class="fas fa-comment-medical"></i> ${motivo}</p>
+    `;
 
-        renderCalendar();
-    </script>
+    const fh = document.getElementById('fechaHoraCombinada')?.value || '';
+    const partes = fh.split(' ');
+    document.getElementById('resumenFecha').innerHTML = `
+        <p><i class="fas fa-calendar"></i> <strong>${partes[0] || 'No seleccionada'}</strong></p>
+        <p><i class="fas fa-clock"></i> <strong>${partes[1] ? partes[1].substring(0,5) : 'No seleccionada'}</strong></p>
+        <p><i class="fas fa-info-circle"></i> Estado: <span class="badge-pendiente">Pendiente</span></p>
+    `;
+}
 
+generarHorarios();
+</script>
 </body>
 </html>
