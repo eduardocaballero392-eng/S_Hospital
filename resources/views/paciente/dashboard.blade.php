@@ -41,7 +41,7 @@
         {{-- BANNER --}}
         <div class="welcome-banner">
             <div class="welcome-text">
-                <h1>¡Hola, {{ $usuario->nombre ?? 'Usuario' }}! 👋</h1>
+                <h1>¡Hola, {{ $usuario->nombre ?? 'Usuario' }}! </h1>
                 <p>{{ now()->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY') }}</p>
             </div>
             <div class="welcome-badge">
@@ -92,7 +92,7 @@
             {{-- PRÓXIMAS CITAS --}}
             <div class="panel">
                 <div class="panel-header">
-                    <div class="panel-title">📅 Próximas citas</div>
+                    <div class="panel-title"> Próximas citas</div>
                     <a href="{{ route('paciente.citas') }}" class="panel-link">Ver todas →</a>
                 </div>
                 <div class="cita-item">
@@ -111,7 +111,7 @@
             {{-- CONSEJOS DE SALUD --}}
             <div class="panel">
                 <div class="panel-header">
-                    <div class="panel-title">💡 Consejos de salud</div>
+                    <div class="panel-title"> Consejos de salud</div>
                     <div class="panel-link" id="verMasConsejo">Ver más →</div>
                 </div>
                 <div class="consejo-slider" id="consejoSlider">

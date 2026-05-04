@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B&L Laboratorio | Agenda tu Cita</title>
+    <title>E&M Laboratorio | Agenda tu Cita</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/agenda_cita.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
                     </svg>
                 </div>
                 <div class="logo-text">
-                    <span class="logo-main">B&L</span>
+                    <span class="logo-main">E&M</span>
                     <span class="logo-sub">Laboratorio</span>
                 </div>
             </div>
@@ -32,7 +32,7 @@
             <div class="nav-links" id="navLinks">
                 <a href="{{ url('/') }}"><i class="fas fa-home"></i> Inicio</a>
                 @auth
-                    <a href="{{ route('paciente.dashboard') }}"><i class="fas fa-th-large"></i> Dashboard</a>
+                    
                     <a href="{{ route('paciente.resultados') }}"><i class="fas fa-file-medical"></i> Resultados</a>
                     <form method="POST" action="{{ route('logout') }}" class="nav-logout">
                         @csrf
@@ -44,6 +44,18 @@
             </div>
         </div>
     </nav>
+
+    {{-- HERO --}}
+    <div class="citas-hero">
+        <div class="citas-hero__overlay"></div>
+        <div class="citas-hero__content">
+            <div class="citas-hero__badge">
+                <i class="fas fa-calendar-check"></i> Agenda tu Cita
+            </div>
+            <h1>Reserva tu <em>cita</em> fácil<br>y rápido</h1>
+            <p>Completa el formulario y nos contactaremos contigo para confirmar tu cita en el menor tiempo posible.</p>
+        </div>
+    </div>
 
     {{-- PROGRESS STEPS --}}
     <div class="progress-wrapper">
@@ -192,9 +204,9 @@
                                 <div class="tipo-icon"><i class="fas fa-tint"></i></div>
                                 <span>Laboratorio Clínico</span>
                             </div>
-                            <div class="tipo-card" data-tipo="BYL Genetics">
+                            <div class="tipo-card" data-tipo="Consulta General">
                                 <div class="tipo-icon"><i class="fas fa-dna"></i></div>
-                                <span>BYL Genetics</span>
+                                <span>Consulta General</span>
                             </div>
                             <div class="tipo-card" data-tipo="Laboratorio de Referencia">
                                 <div class="tipo-icon"><i class="fas fa-microscope"></i></div>
@@ -307,9 +319,12 @@
     @if(session('success'))
     <div class="modal-confirmacion" id="modalConfirmacion">
         <div class="modal-box">
-            
+            <div class="modal-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
             <h3>¡Cita Confirmada!</h3>
-            <p>{{ session('success') }}</p>
+            <p>Hola <strong>{{ session('nombrePaciente') }}</strong>, tu cita ha sido agendada exitosamente.</p>
+            <p style="font-size:13px; color:#6b7a8d; margin-top:8px;">Revisa tu correo para ver tus credenciales de acceso.</p>
             <button onclick="window.location.href='/'">
                 <i class="fas fa-home"></i> Ir al inicio
             </button>

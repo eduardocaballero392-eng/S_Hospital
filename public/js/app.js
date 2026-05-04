@@ -5417,7 +5417,7 @@ var Landing = function Landing() {
             children: "\uD83D\uDD2C"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
             className: "logo-text",
-            children: ["B&L ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+            children: ["E&M ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
               children: "Laboratorio"
             })]
           })]
@@ -5537,7 +5537,7 @@ var Landing = function Landing() {
               className: "floating-card card-2",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
                 children: "\uD83E\uDDEC"
-              }), " BYL Genetics"]
+              }), " E&M Genetics"]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
               className: "floating-card card-3",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
@@ -5638,7 +5638,7 @@ var Landing = function Landing() {
               children: "\uD83D\uDD2C"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("span", {
               className: "logo-text",
-              children: ["B&L ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              children: ["E&M ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
                 children: "Laboratorio"
               })]
             })]
@@ -5661,7 +5661,7 @@ var Landing = function Landing() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("li", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
                 href: "#",
-                children: "BYL Genetics"
+                children: "E&M Genetics"
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("li", {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
@@ -5696,7 +5696,7 @@ var Landing = function Landing() {
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
         className: "footer-bottom",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("p", {
-          children: ["\xA9 ", new Date().getFullYear(), " B&L Laboratorio. Todos los derechos reservados."]
+          children: ["\xA9 ", new Date().getFullYear(), " E&M Laboratorio. Todos los derechos reservados."]
         })
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {

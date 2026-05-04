@@ -328,7 +328,7 @@
         </div>
 
         <div class="footer__libro">
-    <a href="#" class="footer__libro-link">
+    <a href="{{ route('reclamaciones.index') }}" class="footer__libro-link">
         <i class="fas fa-book"></i>
         <span>Libro de Reclamaciones</span>
     </a>

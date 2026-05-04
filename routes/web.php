@@ -30,3 +30,13 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
 // Chatbot
 Route::post('/chatbot/responder', [App\Http\Controllers\ChatbotController::class, 'responder'])->name('chatbot.responder')->middleware('auth');
+
+
+// Rutas públicas de citas
+Route::get('/citas', [App\Http\Controllers\Paciente\CitaController::class, 'index'])->name('paciente.citas');
+Route::post('/citas/guardar', [App\Http\Controllers\Paciente\CitaController::class, 'store'])->name('paciente.citas.store');
+
+
+// Libro de Reclamaciones (público)
+Route::get('/reclamaciones', [App\Http\Controllers\Paciente\ReclamacionController::class, 'index'])->name('reclamaciones.index');
+Route::post('/reclamaciones', [App\Http\Controllers\Paciente\ReclamacionController::class, 'store'])->name('reclamaciones.store');

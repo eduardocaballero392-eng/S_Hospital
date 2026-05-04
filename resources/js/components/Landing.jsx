@@ -49,7 +49,7 @@ const Landing = () => {
                     <div className="logo">
                         <div className="logo-icon">🔬</div>
                         <div className="logo-text">
-                            B&L <span>Laboratorio</span>
+                            E&M <span>Laboratorio</span>
                         </div>
                     </div>
                     <div className="nav-links">
@@ -107,7 +107,7 @@ const Landing = () => {
                                 <span>🔬</span> Laboratorio Clínico
                             </div>
                             <div className="floating-card card-2">
-                                <span>🧬</span> BYL Genetics
+                                <span>🧬</span> E&M Genetics
                             </div>
                             <div className="floating-card card-3">
                                 <span>📊</span> Laboratorio de Referencia
@@ -171,7 +171,7 @@ const Landing = () => {
                     <div className="footer-about">
                         <div className="footer-logo">
                             <span className="logo-icon">🔬</span>
-                            <span className="logo-text">B&L <span>Laboratorio</span></span>
+                            <span className="logo-text">E&M <span>Laboratorio</span></span>
                         </div>
                         <p>Laboratorio clínico para brindar un servicio de calidad a Médicos y pacientes, ofreciendo resultados precisos en tiempos oportunos para el adecuado diagnóstico y/o tratamiento a seguir.</p>
                         <div className="footer-libro">📖 Libro de Reclamaciones</div>
@@ -180,7 +180,7 @@ const Landing = () => {
                         <h4>Nosotros</h4>
                         <ul>
                             <li><a href="#">Laboratorio Clínico</a></li>
-                            <li><a href="#">BYL Genetics</a></li>
+                            <li><a href="#">E&M Genetics</a></li>
                             <li><a href="#">Laboratorio de Referencia</a></li>
                             <li><a href="#">Contacto</a></li>
                         </ul>
@@ -193,7 +193,7 @@ const Landing = () => {
                     </div>
                 </div>
                 <div className="footer-bottom">
-                    <p>&copy; {new Date().getFullYear()} B&L Laboratorio. Todos los derechos reservados.</p>
+                    <p>&copy; {new Date().getFullYear()} E&M Laboratorio. Todos los derechos reservados.</p>
                 </div>
             </footer>
 
