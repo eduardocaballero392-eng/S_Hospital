@@ -33,6 +33,7 @@ class CitaController extends Controller
     public function store(Request $request)
     {
         $fechaMaximaParaMenor = Carbon::today()->subYears(18)->format('Y-m-d');
+        $esInvitado = !Auth::check();
 
         $validator = Validator::make($request->all(), [
             'dni'        => 'required|string|max:8',
@@ -59,13 +60,45 @@ class CitaController extends Controller
             'telefono.min'              => 'El teléfono debe tener 9 dígitos.',
             'motivo.required'           => 'El motivo de la cita es obligatorio.',
             'tipo.required'             => 'El tipo de cita es obligatorio.',
+            'email.required'            => 'El correo electrónico es obligatorio para agendar tu cita.',
             'fecha_nac.before_or_equal' => 'Debes ser mayor de edad (18+) para agendar una cita.',
             'fecha_hora.required'       => 'La fecha y hora son obligatorias.',
             'fecha_hora.after_or_equal' => 'La fecha debe ser hoy o una fecha futura.',
             'fecha_hora.unique'         => 'Ya existe una cita reservada para esa misma fecha y hora. Elige otro horario.',
         ]);
 
+        $validator->sometimes('email', 'required', function () use ($esInvitado) {
+            return $esInvitado;
+        });
+
         $validator->validate();
+
+        // Resolver usuario vinculado antes de guardar paciente para evitar errores
+        // de columnas obligatorias (usuario_id) en algunos esquemas.
+        $usuarioVinculado = Auth::user();
+        $cuentaNueva = false;
+        $credenciales = null;
+
+        if (!$usuarioVinculado && $request->filled('email')) {
+            $usuarioVinculado = Usuario::where('email', $request->email)->first();
+
+            if (!$usuarioVinculado) {
+                $usuarioVinculado = Usuario::create([
+                    'nombre'      => $request->nombres . ' ' . $request->apellidos,
+                    'email'       => $request->email,
+                    'contrasena'  => Hash::make($request->dni),
+                    'rol_id'      => 2,
+                    'estado'      => 'activo',
+                    'paciente_id' => null,
+                ]);
+
+                $cuentaNueva  = true;
+                $credenciales = [
+                    'email'      => $request->email,
+                    'contrasena' => $request->dni,
+                ];
+            }
+        }
 
         // ──────────────────────────────────────────
         // 1️⃣ Guardar o actualizar Paciente por DNI
@@ -73,6 +106,7 @@ class CitaController extends Controller
         $paciente = Paciente::updateOrCreate(
             ['DNI' => $request->dni],
             [
+                'usuario_id' => $usuarioVinculado->id ?? null,
                 'nombre'    => $request->nombres,
                 'apellido'  => $request->apellidos,
                 'fecha_nac' => $request->fecha_nac,
@@ -87,36 +121,20 @@ class CitaController extends Controller
         // 2️⃣ Crear cuenta User automáticamente
         //    Solo si tiene email y no existe cuenta
         // ──────────────────────────────────────────
-        $cuentaNueva = false;
-        $credenciales = null;
+        if ($usuarioVinculado) {
+            // Sincronizar ambos lados de la relación usuario <-> paciente.
+            if (!$paciente->usuario_id || $paciente->usuario_id != $usuarioVinculado->id) {
+                $paciente->update(['usuario_id' => $usuarioVinculado->id]);
+            }
+            if (empty($usuarioVinculado->paciente_id) || $usuarioVinculado->paciente_id != $paciente->id) {
+                $usuarioVinculado->update(['paciente_id' => $paciente->id]);
+            }
 
-        if ($request->filled('email')) {
-            $userExistente = Usuario::where('email', $request->email)->first();
-
-            if (!$userExistente) {
-                // Crear usuario con DNI como contraseña temporal
-                $nuevoUser = Usuario::create([
-                    'nombre'        => $request->nombres . ' ' . $request->apellidos,
-                    'email'       => $request->email,
-                    'contrasena'    => Hash::make($request->dni),
-                    'rol_id'        => 2,   // ajusta según tu columna de roles
-                    'estado'        => 'activo',
-                    'paciente_id' => $paciente->id, // vincula User ↔ Paciente
-                ]);
-
-                // Vincular también desde el lado del Paciente
-                $paciente->update(['usuario_id' => $nuevoUser->id]);
-
-                $cuentaNueva  = true;
-                $credenciales = [
-                    'email'      => $request->email,
-                    'contrasena' => $request->dni,
-                ];
-
-                // Enviar correo con credenciales
+            // Enviar correo solo cuando la cuenta se creó en este flujo.
+            if ($cuentaNueva && $request->filled('email')) {
                 try {
                     Mail::to($request->email)
-                        ->send(new CredencialesMail($nuevoUser, $request->dni));
+                        ->send(new CredencialesMail($usuarioVinculado, $request->dni));
                 } catch (\Exception $e) {
                     // Si el mail falla, no rompemos el flujo
                     \Log::error('Error enviando correo credenciales: ' . $e->getMessage());

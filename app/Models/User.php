@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Paciente;
 
 class User extends Authenticatable
 {
@@ -20,6 +21,7 @@ class User extends Authenticatable
         'contrasena',
         'rol_id',
         'estado',
+        'paciente_id',
     ];
 
     protected $hidden = [
@@ -29,5 +31,10 @@ class User extends Authenticatable
     public function getAuthPassword()
     {
         return $this->contrasena;
+    }
+
+    public function paciente()
+    {
+        return $this->belongsTo(Paciente::class, 'paciente_id');
     }
 }
