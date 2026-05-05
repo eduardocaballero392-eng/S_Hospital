@@ -18,6 +18,9 @@ npm install
 echo "==> Compilando assets..."
 npm run prod
 
+echo "==> Ejecutando migraciones..."
+php artisan migrate --force
+
 echo "==> Limpiando y optimizando Laravel..."
 php artisan config:cache
 php artisan route:cache

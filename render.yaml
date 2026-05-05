@@ -16,17 +16,17 @@ services:
       - key: APP_URL
         sync: false   # Lo pondrás manualmente con la URL de Render
       - key: DB_CONNECTION
-        value: mysql
+        value: pgsql
       - key: DB_HOST
-        sync: false   # URL del host de tu base de datos
+        value: dpg-d7sovdsm0tmc73dctoi0-a
       - key: DB_PORT
-        value: 3306
+        value: 5432
       - key: DB_DATABASE
-        sync: false
+        value: hospital_db_8dhb
       - key: DB_USERNAME
-        sync: false
+        value: hospital_db_8dhb_user
       - key: DB_PASSWORD
-        sync: false
+        value: V27VMTXR8tRYPrzzh8IiDrnRReOvS5hs
       - key: SESSION_DRIVER
         value: file
       - key: CACHE_DRIVER
