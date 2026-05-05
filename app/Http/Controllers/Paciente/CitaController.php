@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Paciente;
 use App\Models\Cita;
 use App\Models\Usuario;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Mail\CredencialesMail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class CitaController extends Controller
 {
@@ -29,18 +32,26 @@ class CitaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $fechaMaximaParaMenor = Carbon::today()->subYears(18)->format('Y-m-d');
+
+        $validator = Validator::make($request->all(), [
             'dni'        => 'required|string|max:8',
             'nombres'    => 'required|string|max:100',
             'apellidos'  => 'required|string|max:100',
-            'fecha_nac'  => 'required|date',
+            'fecha_nac'  => 'required|date|before_or_equal:' . $fechaMaximaParaMenor,
             'genero'     => 'required|string',
             'telefono'   => 'required|string|min:9|max:9',
             'direccion'  => 'nullable|string|max:255',
             'email'      => 'nullable|email|max:150',
             'motivo'     => 'required|string|max:255',
             'tipo'       => 'required|string',
-            'fecha_hora' => 'required|date|after_or_equal:today',
+            'fecha_hora' => [
+                'required',
+                'date',
+                'after_or_equal:today',
+                // Evita que alguien reserve exactamente la misma fecha+hora.
+                Rule::unique('citas', 'fecha_hora'),
+            ],
         ], [
             'dni.required'              => 'El DNI es obligatorio.',
             'nombres.required'          => 'Los nombres son obligatorios.',
@@ -48,9 +59,13 @@ class CitaController extends Controller
             'telefono.min'              => 'El teléfono debe tener 9 dígitos.',
             'motivo.required'           => 'El motivo de la cita es obligatorio.',
             'tipo.required'             => 'El tipo de cita es obligatorio.',
+            'fecha_nac.before_or_equal' => 'Debes ser mayor de edad (18+) para agendar una cita.',
             'fecha_hora.required'       => 'La fecha y hora son obligatorias.',
             'fecha_hora.after_or_equal' => 'La fecha debe ser hoy o una fecha futura.',
+            'fecha_hora.unique'         => 'Ya existe una cita reservada para esa misma fecha y hora. Elige otro horario.',
         ]);
+
+        $validator->validate();
 
         // ──────────────────────────────────────────
         // 1️⃣ Guardar o actualizar Paciente por DNI
