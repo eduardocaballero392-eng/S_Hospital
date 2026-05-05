@@ -105,7 +105,7 @@ class CitaController extends Controller
                 ]);
 
                 // Vincular también desde el lado del Paciente
-                $paciente->update(['user_id' => $nuevoUser->id]);
+                $paciente->update(['usuario_id' => $nuevoUser->id]);
 
                 $cuentaNueva  = true;
                 $credenciales = [
