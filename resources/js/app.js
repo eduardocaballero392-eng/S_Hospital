@@ -13,15 +13,3 @@ import './bootstrap';
  */
 
 import './components/Example';
-
-// ========== NUEVO: LANDING PAGE CON REACT ==========
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import Landing from './components/Landing';
-
-// Verificar si existe el elemento 'root' (solo en la landing page)
-const rootElement = document.getElementById('root');
-if (rootElement) {
-    const root = createRoot(rootElement);
-    root.render(<Landing />);
-}
