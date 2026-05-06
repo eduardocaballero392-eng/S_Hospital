@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+cd /var/www/html/backend || exit 1
+
 # Ejecutar migraciones
 php artisan migrate --force
 

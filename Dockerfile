@@ -27,14 +27,14 @@ WORKDIR /var/www/html
 COPY . .
 
 # Instalar dependencias PHP únicamente
-RUN composer install --no-dev --optimize-autoloader
+RUN cd backend && composer install --no-dev --optimize-autoloader
 
 # Permisos
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 backend/storage backend/bootstrap/cache
 
 # Generar .env base
-RUN cp .env.example .env && php artisan key:generate --force
+RUN cp backend/.env.example backend/.env && cd backend && php artisan key:generate --force
 
 EXPOSE 80
 

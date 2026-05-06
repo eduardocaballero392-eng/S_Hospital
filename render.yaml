@@ -3,7 +3,7 @@ services:
     name: s-hospital
     runtime: php
     buildCommand: "./render-build.sh"
-    startCommand: "php artisan serve --host=0.0.0.0 --port=$PORT"
+    startCommand: "cd backend && php artisan serve --host=0.0.0.0 --port=$PORT"
     envVars:
       - key: APP_NAME
         value: SHospital

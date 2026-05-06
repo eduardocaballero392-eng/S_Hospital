@@ -17,18 +17,13 @@ use Illuminate\Validation\Rule;
 
 class CitaController extends Controller
 {
+    
+
     public function index()
-    {
-        $paciente = null;
-        $usuario  = null;
-
-        if (Auth::check()) {
-            $usuario  = Auth::user();
-            $paciente = $usuario->paciente ?? null;
-        }
-
-        return view('paciente.citas', compact('paciente', 'usuario'));
-    }
+{
+    $citas = Cita::with('paciente')->orderBy('fecha_hora', 'desc')->get();
+    return response()->json($citas);
+}
 
     public function store(Request $request)
     {
@@ -118,7 +113,7 @@ class CitaController extends Controller
         );
 
         // ──────────────────────────────────────────
-        // 2️⃣ Crear cuenta User automáticamente
+        // 2️ Crear cuenta User automáticamente
         //    Solo si tiene email y no existe cuenta
         // ──────────────────────────────────────────
         if ($usuarioVinculado) {
@@ -158,11 +153,13 @@ class CitaController extends Controller
         // ──────────────────────────────────────────
         // 4️⃣ Redirigir con datos de confirmación
         // ──────────────────────────────────────────
-        return back()
-        ->with('success', true)
-        ->with('cuentaNueva', $cuentaNueva)
-        ->with('credenciales', $credenciales)
-        ->with('nombrePaciente', $request->nombres);
+        return response()->json([
+            'success'       => true,
+            'mensaje'       => 'Cita agendada correctamente',
+            'cuentaNueva'   => $cuentaNueva,
+            'credenciales'  => $credenciales,
+            'nombrePaciente'=> $request->nombres,
+        ], 201);
     }
 
     

@@ -5166,16 +5166,16 @@ module.exports = {
 
 /***/ },
 
-/***/ "./resources/js/app.js"
-/*!*****************************!*\
-  !*** ./resources/js/app.js ***!
-  \*****************************/
+/***/ "./frontend/js/app.js"
+/*!****************************!*\
+  !*** ./frontend/js/app.js ***!
+  \****************************/
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
-/* harmony import */ var _components_Example__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Example */ "./resources/js/components/Example.jsx");
+/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./frontend/js/bootstrap.js");
+/* harmony import */ var _components_Example__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Example */ "./frontend/js/components/Example.jsx");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes React and other helpers. It's a great starting point while
@@ -5194,10 +5194,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ },
 
-/***/ "./resources/js/bootstrap.js"
-/*!***********************************!*\
-  !*** ./resources/js/bootstrap.js ***!
-  \***********************************/
+/***/ "./frontend/js/bootstrap.js"
+/*!**********************************!*\
+  !*** ./frontend/js/bootstrap.js ***!
+  \**********************************/
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5241,10 +5241,10 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ },
 
-/***/ "./resources/js/components/Example.jsx"
-/*!*********************************************!*\
-  !*** ./resources/js/components/Example.jsx ***!
-  \*********************************************/
+/***/ "./frontend/js/components/Example.jsx"
+/*!********************************************!*\
+  !*** ./frontend/js/components/Example.jsx ***!
+  \********************************************/
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9766,10 +9766,10 @@ defineJQueryPlugin(Toast);
 
 /***/ },
 
-/***/ "./resources/sass/app.scss"
-/*!*********************************!*\
-  !*** ./resources/sass/app.scss ***!
-  \*********************************/
+/***/ "./frontend/sass/app.scss"
+/*!********************************!*\
+  !*** ./frontend/sass/app.scss ***!
+  \********************************/
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9779,10 +9779,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ },
 
-/***/ "./resources/sass/landing.scss"
-/*!*************************************!*\
-  !*** ./resources/sass/landing.scss ***!
-  \*************************************/
+/***/ "./frontend/sass/landing.scss"
+/*!************************************!*\
+  !*** ./frontend/sass/landing.scss ***!
+  \************************************/
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9792,10 +9792,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ },
 
-/***/ "./resources/sass/paciente/agenda_cita.scss"
-/*!**************************************************!*\
-  !*** ./resources/sass/paciente/agenda_cita.scss ***!
-  \**************************************************/
+/***/ "./frontend/sass/paciente/agenda_cita.scss"
+/*!*************************************************!*\
+  !*** ./frontend/sass/paciente/agenda_cita.scss ***!
+  \*************************************************/
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44922,10 +44922,10 @@ if (false) // removed by dead control flow
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"/js/app": 0,
-/******/ 			"css/agenda_cita": 0,
-/******/ 			"css/landing": 0,
-/******/ 			"css/app": 0
+/******/ 			"/public/js/app": 0,
+/******/ 			"public/css/agenda_cita": 0,
+/******/ 			"public/css/landing": 0,
+/******/ 			"public/css/app": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -44975,10 +44975,10 @@ if (false) // removed by dead control flow
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./resources/sass/app.scss")))
-/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./resources/sass/landing.scss")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./resources/sass/paciente/agenda_cita.scss")))
+/******/ 	__webpack_require__.O(undefined, ["public/css/agenda_cita","public/css/landing","public/css/app"], () => (__webpack_require__("./frontend/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["public/css/agenda_cita","public/css/landing","public/css/app"], () => (__webpack_require__("./frontend/sass/app.scss")))
+/******/ 	__webpack_require__.O(undefined, ["public/css/agenda_cita","public/css/landing","public/css/app"], () => (__webpack_require__("./frontend/sass/landing.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["public/css/agenda_cita","public/css/landing","public/css/app"], () => (__webpack_require__("./frontend/sass/paciente/agenda_cita.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

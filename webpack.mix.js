@@ -1,13 +1,13 @@
 const mix = require('laravel-mix');
 
-mix.js('resources/js/app.js', 'public/js')
+mix.js('frontend/js/app.js', 'public/js')
    .react()
-   .sass('resources/sass/app.scss', 'public/css', {
+   .sass('frontend/sass/app.scss', 'public/css', {
        sassOptions: { quietDeps: true }
    })
-   .sass('resources/sass/landing.scss', 'public/css', {
+   .sass('frontend/sass/landing.scss', 'public/css', {
        sassOptions: { quietDeps: true }
    })
-   .sass('resources/sass/paciente/agenda_cita.scss', 'public/css', {
+   .sass('frontend/sass/paciente/agenda_cita.scss', 'public/css', {
        sassOptions: { quietDeps: true }
    });
