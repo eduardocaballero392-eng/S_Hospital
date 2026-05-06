@@ -137,10 +137,10 @@
                         <div class="cita-sep"></div>
                         <div class="cita-info">
                             <div class="cita-doc">Dr(a). {{ $proximaCita->medico_nombre }}</div>
-                            {{-- ✅ CORREGIDO: fecha_hora en lugar de hora --}}
+                            {{--  fecha_hora en lugar de hora --}}
                             <div class="cita-esp">{{ $proximaCita->especialidad }} · {{ \Carbon\Carbon::parse($proximaCita->fecha_hora)->format('h:i A') }}</div>
                         </div>
-                        {{-- ✅ CORREGIDO: ruta paciente.citas (no existe paciente.citas.ver) --}}
+                        {{--  ruta paciente.citas (no existe paciente.citas.ver) --}}
                         <a href="{{ route('paciente.citas') }}" class="cita-detalle-btn">
                             <i class="fas fa-calendar-check"></i>
                         </a>
