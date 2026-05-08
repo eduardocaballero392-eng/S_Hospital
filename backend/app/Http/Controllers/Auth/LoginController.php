@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Rol;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
@@ -31,14 +32,17 @@ class LoginController extends Controller
        
     }
 
-    //redigir segun el rol
     protected function authenticated(Request $request, $user)
     {
-         if ($user->rol_id == 1) {
+        if ((int) $user->rol_id === Rol::ADMIN) {
             return redirect('/admin/dashboard');
-        } else {
-            return redirect('/paciente/dashboard');
         }
+
+        if ((int) $user->rol_id === Rol::MEDICO) {
+            return redirect('/medico/dashboard');
+        }
+
+        return redirect('/paciente/dashboard');
     }
 
     //usar email para login 

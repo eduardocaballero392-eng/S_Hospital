@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -65,7 +66,7 @@ class RegisterController extends Controller
         'nombre' => $data['name'],
         'email' => $data['email'],
         'contrasena' => Hash::make($data['password']),
-        'rol_id' => 2, // rol por defecto
+        'rol_id' => Rol::PACIENTE,
         'estado' => 'activo',
     ]);
 }

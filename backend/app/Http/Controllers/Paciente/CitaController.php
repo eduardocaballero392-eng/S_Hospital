@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Paciente;
 
 use App\Http\Controllers\Controller;
+use App\Models\Rol;
 use App\Models\Paciente;
 use App\Models\Cita;
 use App\Models\Usuario;
@@ -82,7 +83,7 @@ class CitaController extends Controller
                     'nombre'      => $request->nombres . ' ' . $request->apellidos,
                     'email'       => $request->email,
                     'contrasena'  => Hash::make($request->dni),
-                    'rol_id'      => 2,
+                    'rol_id'      => Rol::PACIENTE,
                     'estado'      => 'activo',
                     'paciente_id' => null,
                 ]);
@@ -151,17 +152,76 @@ class CitaController extends Controller
         ]);
 
         // ──────────────────────────────────────────
-        // 4️⃣ Redirigir con datos de confirmación
+        // 4️⃣ Respuesta: JSON (API) o redirección con flash (formulario web)
         // ──────────────────────────────────────────
-        return response()->json([
-            'success'       => true,
-            'mensaje'       => 'Cita agendada correctamente',
-            'cuentaNueva'   => $cuentaNueva,
-            'credenciales'  => $credenciales,
-            'nombrePaciente'=> $request->nombres,
-        ], 201);
+        if ($request->is('api/*')) {
+            return response()->json([
+                'success'        => true,
+                'mensaje'        => 'Cita agendada correctamente',
+                'cuentaNueva'    => $cuentaNueva,
+                'credenciales'   => $credenciales,
+                'nombrePaciente' => $request->nombres,
+            ], 201);
+        }
+
+        return redirect()
+            ->route('paciente.citas')
+            ->with('success', true)
+            ->with('nombrePaciente', $request->nombres);
     }
 
     
+    //consultar una cita especifica
+    public function show($id)
+    {
+        $cita = Cita::with('paciente')->find($id);
     
+        if (!$cita) {
+            return response()->json(['mensaje' => 'Cita no encontrada'], 404);
+        }
+    
+        return response()->json($cita);
+    }
+
+
+    //actualizar una cita  specifica
+
+    public function update(Request $request, $id)
+{
+    $cita = Cita::find($id);
+
+    if (!$cita) {
+        return response()->json(['mensaje' => 'Cita no encontrada'], 404);
+    }
+
+    $cita->update($request->only([
+        'medico_id', 'sala_id', 'fecha_hora', 'estado', 'motivo', 'tipo'
+    ]));
+
+    return response()->json([
+        'success' => true,
+        'mensaje' => 'Cita actualizada correctamente',
+        'cita'    => $cita
+    ]);
+}
+
+
+//eliminar una cita especifica
+public function destroy($id)
+{
+    $cita = Cita::find($id);
+
+    if (!$cita) {
+        return response()->json(['mensaje' => 'Cita no encontrada'], 404);
+    }
+
+    $cita->delete();
+
+    return response()->json([
+        'success' => true,
+        'mensaje' => 'Cita eliminada correctamente'
+    ]);
+}
+
+
 }

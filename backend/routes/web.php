@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Paciente\CitaController;
 use Illuminate\Support\Facades\Route;
 
 // ========== PÁGINA DE INICIO (LANDING PÚBLICA) ==========
@@ -8,8 +9,11 @@ Route::get('/', function () {
 })->name('landing');
 
 // ========== RUTA PÚBLICA DE CITAS (sin login) ==========
-Route::get('/citas', [App\Http\Controllers\Paciente\CitaController::class, 'index'])->name('paciente.citas');
-Route::post('/citas/guardar', [App\Http\Controllers\Paciente\CitaController::class, 'store'])->name('paciente.citas.store'); // ← store sigue con auth
+Route::get('/citas', function () {
+    return view('paciente.citas');
+})->name('paciente.citas');
+
+Route::post('/citas/guardar', [CitaController::class, 'store'])->name('paciente.citas.store');
 
 Auth::routes();
 
@@ -26,6 +30,11 @@ Route::middleware(['auth'])->prefix('paciente')->group(function () {
 // Rutas del administrador
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+});
+
+// Rutas del médico
+Route::middleware(['auth'])->prefix('medico')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Medico\DashboardController::class, 'index'])->name('medico.dashboard');
 });
 
 // Chatbot

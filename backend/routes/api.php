@@ -9,8 +9,9 @@ use App\Http\Controllers\Paciente\ReclamacionController;
 use App\Http\Controllers\ChatbotController;
 
 // ── Públicas (sin login) ──
-Route::post('/citas', [CitaController::class, 'store']);
-Route::get('/citas', [CitaController::class, 'index']);
+Route::apiResource('citas', CitaController::class)->only([
+    'index', 'store', 'show', 'update', 'destroy'
+]);
 Route::post('/reclamaciones', [ReclamacionController::class, 'store']);
 
 // ── Privadas (requieren login) ──
