@@ -11,9 +11,10 @@
 |
 */
 
-$app = new Illuminate\Foundation\Application(
-    $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
-);
+$app = new Illuminate\Foundation\Application(dirname(__DIR__));
+
+// Keep using the root-level public directory after backend split.
+$app->instance('path.public', dirname(__DIR__, 2).'/public');
 
 /*
 |--------------------------------------------------------------------------
