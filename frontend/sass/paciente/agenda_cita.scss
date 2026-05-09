@@ -1,5 +1,5 @@
 // ============================================================
-// B&L LABORATORIO — agenda_cita.scss 
+// E&M LABORATORIO — agenda_cita.scss 
 // ============================================================
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
@@ -301,19 +301,12 @@ select.form-control {
 }
 
 // ============================================================
-// BUTTONS
+// BUTTONS - CORREGIDO (eliminado %btn-base problemático)
 // ============================================================
-%btn-base {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 13px 28px; border-radius: 10px; font-family: $font-sans;
-  font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s;
-  border: none; text-decoration: none;
-}
-
-.btn-next   { @extend %btn-base; background: linear-gradient(135deg, $teal, $green); color: $white; box-shadow: 0 4px 14px rgba($teal, 0.35); margin-left: auto; &:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba($teal, 0.45); } }
-.btn-prev   { @extend %btn-base; background: $light; color: $navy; border: 1.5px solid $border; &:hover { background: $border; } }
-.btn-submit { @extend %btn-base; background: linear-gradient(135deg, $navy, $teal); color: $white; box-shadow: 0 4px 14px rgba($navy, 0.3); margin-left: auto; &:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba($navy, 0.4); } }
-.btn-back-home { @extend %btn-base; background: transparent; color: $gray; border: 1.5px solid $border; font-size: 13px; padding: 11px 20px; &:hover { color: $navy; border-color: $navy; } }
+.btn-next   { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 10px; font-family: $font-sans; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; border: none; text-decoration: none; background: linear-gradient(135deg, $teal, $green); color: $white; box-shadow: 0 4px 14px rgba($teal, 0.35); margin-left: auto; &:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba($teal, 0.45); } }
+.btn-prev   { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 10px; font-family: $font-sans; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; border: none; text-decoration: none; background: $light; color: $navy; border: 1.5px solid $border; &:hover { background: $border; } }
+.btn-submit { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 10px; font-family: $font-sans; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; border: none; text-decoration: none; background: linear-gradient(135deg, $navy, $teal); color: $white; box-shadow: 0 4px 14px rgba($navy, 0.3); margin-left: auto; &:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba($navy, 0.4); } }
+.btn-back-home { display: inline-flex; align-items: center; gap: 8px; padding: 13px 28px; border-radius: 10px; font-family: $font-sans; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s; border: none; text-decoration: none; background: transparent; color: $gray; border: 1.5px solid $border; font-size: 13px; padding: 11px 20px; &:hover { color: $navy; border-color: $navy; } }
 
 .form-navigation {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;

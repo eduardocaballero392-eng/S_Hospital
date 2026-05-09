@@ -1,0 +1,724 @@
+// ============================================================
+// DASHBOARD MÉDICO - E&M LABORATORIO
+// ============================================================
+
+.medico-dash {
+    background: linear-gradient(135deg, #f0f4f8 0%, #e8edf2 100%);
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+}
+
+// ============================================================
+// NAVBAR
+// ============================================================
+.navbar-medico {
+    background: white;
+    padding: 0.8rem 2rem;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    .nav-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1a5fa8, #0d9e75);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            .logo-main {
+                font-size: 1.2rem;
+                font-weight: 700;
+                font-family: 'Playfair Display', serif;
+                color: #1a2a3a;
+            }
+            .logo-sub {
+                font-size: 0.65rem;
+                color: #0d9e75;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+        }
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 2rem;
+
+        a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            padding: 0.5rem 0;
+
+            &:hover, &.active {
+                color: #1a5fa8;
+                border-bottom: 2px solid #1a5fa8;
+            }
+        }
+    }
+
+    .user-area {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .user-info {
+            text-align: right;
+            .user-name {
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: #1a2a3a;
+            }
+            .user-role {
+                font-size: 0.65rem;
+                color: #0d9e75;
+                font-weight: 600;
+            }
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #1a5fa8, #0d9e75);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: color 0.2s;
+
+            &:hover {
+                color: #ef4444;
+            }
+        }
+    }
+}
+
+// ============================================================
+// MAIN CONTENT
+// ============================================================
+.main-medico {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+
+    .content-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+}
+
+// ============================================================
+// WELCOME BANNER
+// ============================================================
+.welcome-banner {
+    background: linear-gradient(135deg, #1a5fa8 0%, #0d9e75 100%);
+    border-radius: 28px;
+    padding: 1.8rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    box-shadow: 0 15px 35px rgba(26, 95, 168, 0.2);
+
+    .welcome-text {
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+        p {
+            color: rgba(255,255,255,0.85);
+            font-size: 0.85rem;
+        }
+    }
+
+    .welcome-stats {
+        display: flex;
+        gap: 1.5rem;
+
+        .stat-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 0.8rem 1.5rem;
+            text-align: center;
+
+            .stat-number {
+                font-size: 1.8rem;
+                font-weight: 800;
+                color: white;
+            }
+            .stat-label {
+                font-size: 0.7rem;
+                color: rgba(255,255,255,0.9);
+                text-transform: uppercase;
+            }
+        }
+    }
+}
+
+// ============================================================
+// STATS GRID
+// ============================================================
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+
+    .stat-item {
+        background: white;
+        border-radius: 20px;
+        padding: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        transition: all 0.2s;
+
+        &:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(26, 95, 168, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #1a5fa8;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1a2a3a;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    }
+}
+
+// ============================================================
+// SECTION HEADER
+// ============================================================
+.section-header {
+    h2 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1a2a3a;
+        margin: 0;
+
+        i {
+            color: #1a5fa8;
+            margin-right: 8px;
+        }
+    }
+}
+
+// ============================================================
+// ACTIONS GRID
+// ============================================================
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+
+    .action-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        text-decoration: none;
+        transition: all 0.3s;
+
+        &:hover {
+            border-color: #1a5fa8;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(26, 95, 168, 0.1);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+
+            &.aci-blue { background: rgba(26, 95, 168, 0.1); color: #1a5fa8; }
+            &.aci-green { background: rgba(13, 158, 117, 0.1); color: #0d9e75; }
+            &.aci-amber { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+            &.aci-purple { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+            &.aci-coral { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+            &.aci-teal { background: rgba(20, 184, 166, 0.1); color: #14b8a6; }
+        }
+
+        .action-info {
+            flex: 1;
+
+            .action-title {
+                font-size: 0.9rem;
+                font-weight: 700;
+                color: #1a2a3a;
+            }
+            .action-sub {
+                font-size: 0.7rem;
+                color: #94a3b8;
+            }
+        }
+
+        .action-arrow {
+            color: #cbd5e1;
+            transition: all 0.2s;
+        }
+
+        &:hover .action-arrow {
+            transform: translateX(5px);
+            color: #1a5fa8;
+        }
+    }
+}
+
+// ============================================================
+// BOTTOM ROW
+// ============================================================
+.bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+// ============================================================
+// PANEL
+// ============================================================
+.panel {
+    background: white;
+    border-radius: 24px;
+    padding: 1.3rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.2rem;
+        padding-bottom: 0.8rem;
+        border-bottom: 1.5px solid #f0f2f8;
+
+        .panel-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1a2a3a;
+
+            i {
+                color: #1a5fa8;
+                margin-right: 8px;
+            }
+        }
+
+        .panel-link {
+            font-size: 0.75rem;
+            color: #1a5fa8;
+            text-decoration: none;
+            font-weight: 500;
+
+            &:hover {
+                color: #0d9e75;
+            }
+        }
+    }
+}
+
+// ============================================================
+// CITAS CARD
+// ============================================================
+.cita-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #f0f2f8;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .cita-time {
+        text-align: center;
+        min-width: 70px;
+
+        .cita-hour {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a5fa8;
+        }
+        .cita-date {
+            font-size: 0.65rem;
+            color: #94a3b8;
+        }
+    }
+
+    .cita-info {
+        flex: 1;
+
+        .cita-patient {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1a2a3a;
+        }
+        .cita-type {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+    }
+
+    .cita-status {
+        span {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 30px;
+        }
+
+        &.pendiente span {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+        &.confirmada span {
+            background: rgba(13, 158, 117, 0.15);
+            color: #0d9e75;
+        }
+        &.completada span {
+            background: rgba(26, 95, 168, 0.15);
+            color: #1a5fa8;
+        }
+    }
+}
+
+// ============================================================
+// EMPTY STATE
+// ============================================================
+.empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+
+    i {
+        font-size: 2.5rem;
+        color: #cbd5e1;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #1a2a3a;
+        margin-bottom: 0.25rem;
+    }
+
+    span {
+        font-size: 0.7rem;
+        color: #94a3b8;
+    }
+}
+
+// ============================================================
+// TIPS LIST
+// ============================================================
+.tips-list {
+    .tip-item {
+        display: flex;
+        gap: 1rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #f0f2f8;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        .tip-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+
+            &.blue { background: rgba(26, 95, 168, 0.1); color: #1a5fa8; }
+            &.green { background: rgba(13, 158, 117, 0.1); color: #0d9e75; }
+            &.teal { background: rgba(20, 184, 166, 0.1); color: #14b8a6; }
+        }
+
+        .tip-content {
+            flex: 1;
+
+            .tip-title {
+                font-size: 0.85rem;
+                font-weight: 700;
+                color: #1a2a3a;
+                margin-bottom: 4px;
+            }
+            .tip-desc {
+                font-size: 0.7rem;
+                color: #64748b;
+            }
+        }
+    }
+}
+
+// ============================================================
+// CHATBOT
+// ============================================================
+.chatbot-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #1a5fa8, #0d9e75);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(26, 95, 168, 0.4);
+    z-index: 999;
+    transition: all 0.2s;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.chatbot-box {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 360px;
+    height: 480px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    z-index: 999;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+
+    &.active {
+        display: flex;
+    }
+
+    .chatbot-header {
+        background: linear-gradient(135deg, #1a5fa8, #0d9e75);
+        padding: 1rem 1.2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .chatbot-header-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .chatbot-avatar {
+                width: 38px;
+                height: 38px;
+                background: rgba(255,255,255,0.2);
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+            }
+
+            h6 {
+                color: white;
+                font-weight: 700;
+                margin: 0;
+                font-size: 0.9rem;
+            }
+            small {
+                color: rgba(255,255,255,0.8);
+                font-size: 0.65rem;
+            }
+        }
+
+        .chatbot-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+        }
+    }
+
+    .chatbot-messages {
+        flex: 1;
+        padding: 1rem;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: #f8fafc;
+
+        .message {
+            display: flex;
+
+            &.user {
+                justify-content: flex-end;
+                .message-bubble {
+                    background: linear-gradient(135deg, #1a5fa8, #0d9e75);
+                    color: white;
+                    border-radius: 18px 18px 6px 18px;
+                }
+            }
+            &.bot {
+                justify-content: flex-start;
+                .message-bubble {
+                    background: white;
+                    color: #1a2a3a;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 18px 18px 18px 6px;
+                }
+            }
+            .message-bubble {
+                padding: 10px 14px;
+                font-size: 0.8rem;
+                max-width: 80%;
+                line-height: 1.4;
+            }
+        }
+    }
+
+    .chatbot-input {
+        padding: 1rem;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        gap: 8px;
+        background: white;
+
+        input {
+            flex: 1;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            padding: 10px 14px;
+            font-size: 0.8rem;
+            font-family: 'Outfit', sans-serif;
+
+            &:focus {
+                outline: none;
+                border-color: #1a5fa8;
+            }
+        }
+
+        button {
+            width: 40px;
+            background: linear-gradient(135deg, #1a5fa8, #0d9e75);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+        }
+    }
+}
+
+// ============================================================
+// RESPONSIVE
+// ============================================================
+@media (max-width: 1000px) {
+    .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bottom-row {
+        grid-template-columns: 1fr;
+    }
+
+    .navbar-medico .nav-links {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .main-medico {
+        padding: 1rem;
+    }
+
+    .welcome-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .navbar-medico .nav-container {
+        flex-direction: column;
+    }
+
+    .navbar-medico .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

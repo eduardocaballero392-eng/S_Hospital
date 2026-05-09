@@ -528,7 +528,7 @@ select.form-control {
   flex-shrink: 0;
 }
 
-.btn-back-home, .btn-submit, .btn-prev, .btn-next {
+.btn-next {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -541,9 +541,6 @@ select.form-control {
   transition: all 0.25s;
   border: none;
   text-decoration: none;
-}
-
-.btn-next {
   background: linear-gradient(135deg, #0d9e75, #2db87a);
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(13, 158, 117, 0.35);
@@ -555,6 +552,18 @@ select.form-control {
 }
 
 .btn-prev {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  border-radius: 10px;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  border: none;
+  text-decoration: none;
   background: #f4f8fc;
   color: #1a3a5c;
   border: 1.5px solid #e2ecf5;
@@ -564,6 +573,18 @@ select.form-control {
 }
 
 .btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  border-radius: 10px;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  border: none;
+  text-decoration: none;
   background: linear-gradient(135deg, #1a3a5c, #0d9e75);
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(26, 58, 92, 0.3);
@@ -575,6 +596,18 @@ select.form-control {
 }
 
 .btn-back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  border-radius: 10px;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  border: none;
+  text-decoration: none;
   background: transparent;
   color: #6b7a8d;
   border: 1.5px solid #e2ecf5;

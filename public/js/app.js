@@ -44922,10 +44922,10 @@ if (false) // removed by dead control flow
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"/public/js/app": 0,
-/******/ 			"public/css/agenda_cita": 0,
-/******/ 			"public/css/landing": 0,
-/******/ 			"public/css/app": 0
+/******/ 			"/js/app": 0,
+/******/ 			"css/agenda_cita": 0,
+/******/ 			"css/landing": 0,
+/******/ 			"css/app": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -44975,10 +44975,10 @@ if (false) // removed by dead control flow
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["public/css/agenda_cita","public/css/landing","public/css/app"], () => (__webpack_require__("./frontend/js/app.js")))
-/******/ 	__webpack_require__.O(undefined, ["public/css/agenda_cita","public/css/landing","public/css/app"], () => (__webpack_require__("./frontend/sass/app.scss")))
-/******/ 	__webpack_require__.O(undefined, ["public/css/agenda_cita","public/css/landing","public/css/app"], () => (__webpack_require__("./frontend/sass/landing.scss")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["public/css/agenda_cita","public/css/landing","public/css/app"], () => (__webpack_require__("./frontend/sass/paciente/agenda_cita.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./frontend/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./frontend/sass/app.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./frontend/sass/landing.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app"], () => (__webpack_require__("./frontend/sass/paciente/agenda_cita.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

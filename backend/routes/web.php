@@ -44,3 +44,13 @@ Route::post('/chatbot/responder', [App\Http\Controllers\ChatbotController::class
 // Libro de Reclamaciones (público)
 Route::get('/reclamaciones', [App\Http\Controllers\Paciente\ReclamacionController::class, 'index'])->name('reclamaciones.index');
 Route::post('/reclamaciones', [App\Http\Controllers\Paciente\ReclamacionController::class, 'store'])->name('reclamaciones.store');
+
+Route::middleware(['auth'])->prefix('medico')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\Medico\DashboardController::class, 'index'])->name('medico.dashboard');
+    Route::get('/citas', [App\Http\Controllers\Medico\CitaController::class, 'index'])->name('medico.citas');
+    Route::get('/pacientes', [App\Http\Controllers\Medico\PacienteController::class, 'index'])->name('medico.pacientes');
+    Route::get('/recetas', [App\Http\Controllers\Medico\RecetaController::class, 'index'])->name('medico.recetas');
+    Route::get('/diagnosticos', [App\Http\Controllers\Medico\DiagnosticoController::class, 'index'])->name('medico.diagnosticos');
+    Route::get('/historial', [App\Http\Controllers\Medico\HistorialController::class, 'index'])->name('medico.historial');
+    Route::get('/perfil', [App\Http\Controllers\Medico\PerfilController::class, 'index'])->name('medico.perfil');
+});
