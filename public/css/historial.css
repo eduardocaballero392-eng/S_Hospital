@@ -1,0 +1,339 @@
+.selector-paciente-historial {
+  background: white;
+  border-radius: 16px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+.selector-paciente-historial .select-group {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+.selector-paciente-historial .select-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1a2a3a;
+}
+.selector-paciente-historial .select-group label i {
+  color: #1a5fa8;
+  margin-right: 6px;
+}
+.selector-paciente-historial .select-group .filtro-select {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-family: "Outfit", sans-serif;
+  min-width: 250px;
+  cursor: pointer;
+}
+
+.info-paciente-historial {
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+.info-paciente-historial .paciente-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.info-paciente-historial .paciente-header .paciente-avatar-grande {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #1a5fa8, #0d9e75);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.info-paciente-historial .paciente-header .paciente-avatar-grande .avatar-inicial {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+}
+.info-paciente-historial .paciente-header .paciente-info-principal {
+  flex: 1;
+}
+.info-paciente-historial .paciente-header .paciente-info-principal h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a2a3a;
+  margin-bottom: 0.5rem;
+}
+.info-paciente-historial .paciente-header .paciente-info-principal .info-detalles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.info-paciente-historial .paciente-header .paciente-info-principal .info-detalles span {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+.info-paciente-historial .paciente-header .paciente-info-principal .info-detalles span i {
+  margin-right: 5px;
+  color: #1a5fa8;
+}
+
+.tabs-historial {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.tabs-historial .tab-btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  background: #f1f5f9;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "Outfit", sans-serif;
+}
+.tabs-historial .tab-btn:hover {
+  background: #e2e8f0;
+}
+.tabs-historial .tab-btn.active {
+  background: #1a5fa8;
+  color: white;
+}
+.tabs-historial .tab-btn.active i {
+  color: white;
+}
+.tabs-historial .tab-btn i {
+  margin-right: 6px;
+  color: #1a5fa8;
+}
+
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.historial-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+.historial-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+.historial-card .card-header h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a2a3a;
+  margin: 0;
+}
+.historial-card .card-header h3 i {
+  color: #1a5fa8;
+  margin-right: 8px;
+}
+.historial-card .card-header .btn-nuevo {
+  background: linear-gradient(135deg, #1a5fa8, #0d9e75);
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.historial-card .card-header .btn-nuevo:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(26, 95, 168, 0.3);
+}
+.historial-card .lista-historial {
+  padding: 0;
+}
+.historial-card .lista-historial .historial-item {
+  display: flex;
+  padding: 1rem;
+  border-bottom: 1px solid #f0f2f8;
+  transition: background 0.2s;
+}
+.historial-card .lista-historial .historial-item:hover {
+  background: #fafcff;
+}
+.historial-card .lista-historial .historial-item .item-fecha {
+  min-width: 90px;
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 500;
+}
+.historial-card .lista-historial .historial-item .item-contenido {
+  flex: 1;
+}
+.historial-card .lista-historial .historial-item .item-contenido .item-titulo {
+  font-weight: 700;
+  color: #1a2a3a;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+}
+.historial-card .lista-historial .historial-item .item-contenido .item-descripcion {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+.historial-card .lista-historial .historial-item .item-contenido .item-medico, .historial-card .lista-historial .historial-item .item-contenido .item-dosis {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  display: inline-block;
+  margin-right: 1rem;
+}
+.historial-card .lista-historial .historial-item .item-contenido .item-estado {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 5px;
+}
+.historial-card .lista-historial .historial-item .item-contenido .item-estado.normal {
+  background: rgba(13, 158, 117, 0.12);
+  color: #0d9e75;
+}
+.historial-card .lista-historial .historial-item .item-contenido .item-estado.anormal {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+.historial-card .lista-historial .historial-item .item-contenido .item-estado.pendiente {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+.historial-card .lista-historial .historial-item .item-contenido .item-estado.completada, .historial-card .lista-historial .historial-item .item-contenido .item-estado.confirmada {
+  background: rgba(13, 158, 117, 0.12);
+  color: #0d9e75;
+}
+
+.empty-historial, .empty-seleccion {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 20px;
+}
+.empty-historial i, .empty-seleccion i {
+  font-size: 3rem;
+  color: #cbd5e1;
+  margin-bottom: 1rem;
+}
+.empty-historial p, .empty-seleccion p {
+  font-size: 0.9rem;
+  color: #1a2a3a;
+  margin-bottom: 0.3rem;
+}
+
+@media (max-width: 768px) {
+  .historial-item {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .info-detalles {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .tabs-historial {
+    justify-content: center;
+  }
+  .selector-paciente-historial .select-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .selector-paciente-historial .filtro-select {
+    width: 100%;
+  }
+}
+/* Selector de paciente - Mismo estilo que filtros */
+.selector-paciente-historial {
+  margin-bottom: 1.5rem;
+}
+
+.filtros-paciente {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.filtros-left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.select-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8fafc;
+  padding: 0.3rem 0.8rem;
+  border-radius: 30px;
+}
+
+.select-group label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #1a2a3a;
+}
+
+.select-group label i {
+  color: #1a5fa8;
+  margin-right: 4px;
+}
+
+.filtro-select {
+  padding: 0.4rem 2rem 0.4rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: white;
+  font-size: 0.75rem;
+  font-family: "Outfit", sans-serif;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.filtro-select:hover {
+  border-color: #1a5fa8;
+}
+
+.filtro-select:focus {
+  border-color: #1a5fa8;
+  box-shadow: 0 0 0 2px rgba(26, 95, 168, 0.1);
+}

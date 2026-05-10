@@ -2,5 +2,8 @@
     "/js/app.js": "/js/app.js",
     "/css/agenda_cita.css": "/css/agenda_cita.css",
     "/css/landing.css": "/css/landing.css",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/css/pacientes.css": "/css/pacientes.css",
+    "/css/cita.css": "/css/cita.css",
+    "/css/historial.css": "/css/historial.css"
 }

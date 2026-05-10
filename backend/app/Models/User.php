@@ -37,4 +37,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Paciente::class, 'paciente_id');
     }
+
+    public function medico()
+    {
+        return $this->hasOne(Medico::class, 'usuario_id');
+    }
+
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'rol_id');
+    }
 }

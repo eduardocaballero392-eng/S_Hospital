@@ -41,10 +41,7 @@
                 <i class="fas fa-users"></i>
                 <span>Mis pacientes</span>
             </a>
-            <a href="{{ route('medico.recetas') }}" class="nav-item">
-                <i class="fas fa-prescription-bottle"></i>
-                <span>Recetas</span>
-            </a>
+          
             <a href="{{ route('medico.diagnosticos') }}" class="nav-item">
                 <i class="fas fa-file-alt"></i>
                 <span>Diagnósticos</span>
@@ -53,10 +50,7 @@
                 <i class="fas fa-history"></i>
                 <span>Historial clínico</span>
             </a>
-            <a href="{{ route('medico.perfil') }}" class="nav-item">
-                <i class="fas fa-user-md"></i>
-                <span>Mi perfil</span>
-            </a>
+            
         </nav>
 
         <div class="sidebar-footer">
@@ -78,7 +72,7 @@
                 <div class="medico-avatar">{{ strtoupper(substr($usuario->nombre ?? 'D', 0, 1)) }}</div>
                 <div class="medico-datos">
                     <h1>Dr. {{ $usuario->nombre ?? 'Ramírez López' }}</h1>
-                    <span class="medico-especialidad">{{ $medico->especialidad->nombre ?? 'MÉDICO' }}</span>
+                    <span class="medico-especialidad">{{ $medico?->especialidad?->nombre ?? 'MÉDICO' }}</span>
                 </div>
             </div>
             <div class="medico-fecha">
@@ -131,7 +125,7 @@
             <div class="stat-item">
                 <div class="stat-icon"><i class="fas fa-stethoscope"></i></div>
                 <div>
-                    <div class="stat-number">{{ $medico->especialidad->nombre ?? 'Medicina General' }}</div>
+                    <div class="stat-number">{{ $medico?->especialidad?->nombre ?? 'Medicina General' }}</div>
                     <div class="stat-label">Especialidad</div>
                 </div>
             </div>

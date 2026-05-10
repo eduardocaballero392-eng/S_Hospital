@@ -1,0 +1,289 @@
+// ============================================================
+// MIS PACIENTES - E&M LABORATORIO
+// ============================================================
+
+// Estadísticas de pacientes
+.stats-pacientes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .stat-card-paciente {
+        background: white;
+        border-radius: 16px;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        transition: all 0.2s;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(26, 95, 168, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #1a5fa8;
+        }
+
+        .stat-info {
+            .stat-number {
+                font-size: 1.3rem;
+                font-weight: 800;
+                color: #1a2a3a;
+                line-height: 1.2;
+            }
+            .stat-label {
+                font-size: 0.65rem;
+                color: #64748b;
+            }
+        }
+    }
+}
+
+// Filtros
+.filtros-pacientes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+
+    .filtros-group {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .buscador-pacientes {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #f1f5f9;
+        padding: 0.5rem 1rem;
+        border-radius: 30px;
+
+        input {
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 0.8rem;
+            width: 220px;
+            font-family: 'Outfit', sans-serif;
+        }
+    }
+}
+
+// Tabla de pacientes
+.tabla-pacientes-container {
+    background: white;
+    border-radius: 20px;
+    overflow-x: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+
+    .tabla-pacientes {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 900px;
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1a2a3a;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f2f8;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: #fafcff;
+        }
+    }
+}
+
+// Avatar paciente
+.paciente-avatar {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    .avatar-inicial {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #1a5fa8, #0d9e75);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+    .paciente-info-cell {
+        .paciente-nombre-cell {
+            font-weight: 600;
+            color: #1a2a3a;
+            font-size: 0.85rem;
+        }
+        .paciente-ultimo-diagnostico {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+    }
+}
+
+// Género badge
+.genero-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 600;
+
+    &.masculino {
+        background: rgba(26, 95, 168, 0.12);
+        color: #1a5fa8;
+    }
+    &.femenino {
+        background: rgba(236, 72, 153, 0.12);
+        color: #ec4899;
+    }
+}
+
+// Fechas
+.fecha-cell {
+    font-size: 0.8rem;
+    color: #1a2a3a;
+
+    &.proxima {
+        color: #0d9e75;
+        font-weight: 500;
+    }
+}
+
+.sin-cita {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+// Botones de acción
+.acciones-cell {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    button {
+        width: 34px;
+        height: 34px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.85rem;
+    }
+
+    .btn-ver-historial {
+        background: #e2e8f0;
+        color: #8b5cf6;
+        &:hover {
+            background: #8b5cf6;
+            color: white;
+        }
+    }
+    .btn-agendar-cita {
+        background: #e2e8f0;
+        color: #1a5fa8;
+        &:hover {
+            background: #1a5fa8;
+            color: white;
+        }
+    }
+    .btn-receta {
+        background: #e2e8f0;
+        color: #f59e0b;
+        &:hover {
+            background: #f59e0b;
+            color: white;
+        }
+    }
+    .btn-diagnostico {
+        background: #e2e8f0;
+        color: #0d9e75;
+        &:hover {
+            background: #0d9e75;
+            color: white;
+        }
+    }
+}
+
+.empty-pacientes {
+    text-align: center;
+    padding: 3rem;
+
+    i {
+        font-size: 3rem;
+        color: #cbd5e1;
+        margin-bottom: 1rem;
+    }
+    p {
+        font-size: 0.9rem;
+        color: #1a2a3a;
+        margin-bottom: 0.3rem;
+    }
+    span {
+        font-size: 0.8rem;
+        color: #64748b;
+    }
+}
+
+// Modal grande
+.modal-large {
+    max-width: 700px;
+}
+
+// Responsive
+@media (max-width: 900px) {
+    .stats-pacientes {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .filtros-pacientes {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .buscador-pacientes input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .stats-pacientes {
+        grid-template-columns: 1fr;
+    }
+    .acciones-cell {
+        justify-content: center;
+    }
+}
