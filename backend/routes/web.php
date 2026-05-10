@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Paciente\CitaController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 // ========== PÁGINA DE INICIO (LANDING PÚBLICA) ==========
 Route::get('/', function () {
@@ -16,6 +17,12 @@ Route::get('/citas', function () {
 Route::post('/citas/guardar', [CitaController::class, 'store'])->name('paciente.citas.store');
 
 Auth::routes();
+
+// ========== REDIRECCIÓN PERSONALIZADA DESPUÉS DE LOGOUT ==========
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect()->route('landing');
+})->name('logout');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -32,19 +39,14 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 });
 
-// Rutas del médico
-Route::middleware(['auth'])->prefix('medico')->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\Medico\DashboardController::class, 'index'])->name('medico.dashboard');
-});
-
 // Chatbot
 Route::post('/chatbot/responder', [App\Http\Controllers\ChatbotController::class, 'responder'])->name('chatbot.responder')->middleware('auth');
-
 
 // Libro de Reclamaciones (público)
 Route::get('/reclamaciones', [App\Http\Controllers\Paciente\ReclamacionController::class, 'index'])->name('reclamaciones.index');
 Route::post('/reclamaciones', [App\Http\Controllers\Paciente\ReclamacionController::class, 'store'])->name('reclamaciones.store');
 
+// Rutas del médico
 Route::middleware(['auth'])->prefix('medico')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Medico\DashboardController::class, 'index'])->name('medico.dashboard');
     Route::get('/citas', [App\Http\Controllers\Medico\CitaController::class, 'index'])->name('medico.citas');

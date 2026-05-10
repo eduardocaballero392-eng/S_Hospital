@@ -11,44 +11,65 @@
 </head>
 <body class="dash">
 
-    {{-- NAVBAR --}}
+    {{-- ============================== NAVBAR ============================== --}}
     <nav class="navbar">
         <div class="navbar-brand">
             <div class="brand-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8">
                     <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
                     <circle cx="12" cy="12" r="3"/>
                 </svg>
             </div>
             <span class="brand-name">E&M<span>Laboratorio</span></span>
         </div>
-        <div class="nav-right">
-            
-            <div class="user-info">
-                <div class="user-name">{{ $usuario->nombre ?? 'Usuario' }}</div>
-                <div class="user-role">PACIENTE</div>
-            </div>
-            <div class="avatar">{{ strtoupper(substr($usuario->nombre ?? 'U', 0, 1)) }}</div>
-        </div>
+        <<div class="nav-right">
+    <div class="user-info">
+        <div class="user-name">{{ $usuario->nombre ?? 'Usuario' }}</div>
+        <div class="user-role">PACIENTE</div>
+    </div>
+    <div class="avatar">{{ strtoupper(substr($usuario->nombre ?? 'U', 0, 1)) }}</div>
+    
+    {{-- BOTÓN DE SALIR / CERRAR SESIÓN --}}
+    <form method="POST" action="{{ route('logout') }}" class="logout-form">
+        @csrf
+        <button type="submit" class="logout-btn" title="Cerrar sesión">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
+    </form>
+</div>
     </nav>
 
-    {{-- CONTENIDO PRINCIPAL --}}
+    {{-- ============================== MAIN CONTENT ============================== --}}
     <div class="main">
 
-        {{-- BANNER DE BIENVENIDA --}}
+        {{-- BANNER DE BIENVENIDA MEJORADO --}}
         <div class="welcome-banner">
             <div class="welcome-text">
-                <h1>¡Hola, {{ $usuario->nombre ?? 'Usuario' }}! </h1>
+                <h1>¡Hola, {{ $usuario->nombre ?? 'Usuario' }}!</h1>
                 <p>{{ now()->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY') }}</p>
             </div>
-            <div class="welcome-badge">
-                <div class="badge-num">{{ $citasPendientes ?? 0 }}</div>
-                <div class="badge-lbl">Citas este mes</div>
+            <div class="welcome-stats">
+                <div class="stat-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <div class="stat-info">
+                        <div class="stat-number">{{ $citasPendientes ?? 0 }}</div>
+                        <div class="stat-label">Citas pendientes</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-flask"></i>
+                    <div class="stat-info">
+                        <div class="stat-number">{{ $resultadosPendientes ?? 0 }}</div>
+                        <div class="stat-label">Resultados nuevos</div>
+                    </div>
+                </div>
             </div>
         </div>
 
         {{-- SECCIÓN: MIS RESULTADOS --}}
-        <div class="section-label"> Resultados recientes</div>
+        <div class="section-label">
+            Resultados recientes
+        </div>
         <div class="resultados-destacados">
             @if(isset($resultados) && count($resultados) > 0)
                 @foreach($resultados->take(2) as $resultado)
@@ -64,7 +85,6 @@
                             {{ ucfirst($resultado->estado) }}
                         </div>
                     </div>
-                    {{--  CORREGIDO: ruta paciente.resultados (no existe paciente.resultados.ver) --}}
                     <a href="{{ route('paciente.resultados') }}" class="resultado-ver">
                         Ver <i class="fas fa-arrow-right"></i>
                     </a>
@@ -77,18 +97,18 @@
                 <div class="resultado-vacio">
                     <i class="fas fa-chart-line"></i>
                     <p>Aún no tienes resultados disponibles.</p>
-                    <p class="vacio-sub">Cuando tengas exámenes listos, aparecerán aquí.</p>
+                    <span>Cuando tengas exámenes listos, aparecerán aquí.</span>
                 </div>
             @endif
         </div>
 
         {{-- ACCIONES RÁPIDAS --}}
-        <div class="section-label"> Acciones rápidas</div>
+        <div class="section-label">
+        Acciones rápidas
+        </div>
         <div class="actions-grid">
             <a href="{{ route('paciente.diagnosticos') }}" class="action-card">
-                <div class="ac-icon aci-green">
-                    <i class="fas fa-file-alt"></i>
-                </div>
+                <div class="ac-icon aci-green"><i class="fas fa-file-alt"></i></div>
                 <div class="ac-text">
                     <div class="ac-title">Mis diagnósticos</div>
                     <div class="ac-sub">Ver historial clínico</div>
@@ -97,9 +117,7 @@
             </a>
 
             <a href="{{ route('paciente.recetas') }}" class="action-card">
-                <div class="ac-icon aci-amber">
-                    <i class="fas fa-prescription-bottle"></i>
-                </div>
+                <div class="ac-icon aci-amber"><i class="fas fa-prescription-bottle"></i></div>
                 <div class="ac-text">
                     <div class="ac-title">Mis recetas</div>
                     <div class="ac-sub">Ver recetas médicas activas</div>
@@ -108,9 +126,7 @@
             </a>
 
             <a href="{{ route('paciente.resultados') }}" class="action-card">
-                <div class="ac-icon aci-teal">
-                    <i class="fas fa-chart-line"></i>
-                </div>
+                <div class="ac-icon aci-teal"><i class="fas fa-chart-line"></i></div>
                 <div class="ac-text">
                     <div class="ac-title">Todos los resultados</div>
                     <div class="ac-sub">Ver historial completo de exámenes</div>
@@ -124,33 +140,28 @@
             {{-- PRÓXIMAS CITAS --}}
             <div class="panel">
                 <div class="panel-header">
-                    <div class="panel-title">Próximas citas</div>
+                    <div class="panel-title"><i class="fas fa-calendar-week"></i> Próximas citas</div>
                     <a href="{{ route('paciente.citas') }}" class="panel-link">Ver todas →</a>
                 </div>
                 @if(isset($proximaCita))
-                    <div class="cita-item">
-                        <div class="cita-date">
-                            {{--  CORREGIDO: fecha_hora en lugar de fecha --}}
-                            <div class="cita-day">{{ \Carbon\Carbon::parse($proximaCita->fecha_hora)->format('d') }}</div>
-                            <div class="cita-mon">{{ \Carbon\Carbon::parse($proximaCita->fecha_hora)->translatedFormat('M') }}</div>
+                    <div class="cita-card">
+                        <div class="cita-fecha">
+                            <div class="cita-dia">{{ \Carbon\Carbon::parse($proximaCita->fecha_hora)->format('d') }}</div>
+                            <div class="cita-mes">{{ \Carbon\Carbon::parse($proximaCita->fecha_hora)->translatedFormat('M') }}</div>
                         </div>
-                        <div class="cita-sep"></div>
                         <div class="cita-info">
-                            <div class="cita-doc">Dr(a). {{ $proximaCita->medico_nombre }}</div>
-                            {{--  fecha_hora en lugar de hora --}}
-                            <div class="cita-esp">{{ $proximaCita->especialidad }} · {{ \Carbon\Carbon::parse($proximaCita->fecha_hora)->format('h:i A') }}</div>
+                            <div class="cita-medico">Dr(a). {{ $proximaCita->medico_nombre }}</div>
+                            <div class="cita-especialidad">{{ $proximaCita->especialidad }} · {{ \Carbon\Carbon::parse($proximaCita->fecha_hora)->format('h:i A') }}</div>
                         </div>
-                        {{--  ruta paciente.citas (no existe paciente.citas.ver) --}}
-                        <a href="{{ route('paciente.citas') }}" class="cita-detalle-btn">
+                        <a href="{{ route('paciente.citas') }}" class="cita-accion">
                             <i class="fas fa-calendar-check"></i>
                         </a>
                     </div>
                 @else
-                    <div class="cita-item vacio">
-                        <div class="cita-info" style="text-align: center; width: 100%;">
-                            <div class="cita-doc">Sin citas próximas</div>
-                            <div class="cita-sub" style="font-size:13px; color:#6b7a8d; margin-top:6px;">Tu cita anterior ya fue atendida. El personal te contactará para nuevas citas.</div>
-                        </div>
+                    <div class="empty-cita">
+                        <i class="fas fa-calendar-day"></i>
+                        <p>Sin citas próximas</p>
+                        <span>El personal te contactará para nuevas citas</span>
                     </div>
                 @endif
             </div>
@@ -158,21 +169,21 @@
             {{-- CONSEJOS DE SALUD --}}
             <div class="panel">
                 <div class="panel-header">
-                    <div class="panel-title"> Consejos de salud</div>
+                    <div class="panel-title"><i class="fas fa-lightbulb"></i> Consejos de salud</div>
                     <div class="panel-link" id="verMasConsejo">Ver más →</div>
                 </div>
                 <div class="consejo-slider" id="consejoSlider">
                     <div class="consejo-item active">
                         <div class="consejo-icon ci-blue"><i class="fas fa-clock"></i></div>
                         <div class="consejo-text">
-                            <div class="consejo-titulo">Toma tu medicación a tiempo</div>
+                            <div class="consejo-titulo"> Toma tu medicación a tiempo</div>
                             <div class="consejo-desc">Recordatorio diario · No olvides tomarlo con agua</div>
                         </div>
                     </div>
                     <div class="consejo-item">
                         <div class="consejo-icon ci-green"><i class="fas fa-walking"></i></div>
                         <div class="consejo-text">
-                            <div class="consejo-titulo">Camina 30 minutos al día</div>
+                            <div class="consejo-titulo">🚶‍♂️ Camina 30 minutos al día</div>
                             <div class="consejo-desc">Mejora tu salud cardiovascular</div>
                         </div>
                     </div>
@@ -186,8 +197,15 @@
                     <div class="consejo-item">
                         <div class="consejo-icon ci-amber"><i class="fas fa-tint"></i></div>
                         <div class="consejo-text">
-                            <div class="consejo-titulo">Hidratación: 8 vasos de agua al día</div>
+                            <div class="consejo-titulo"> Hidratación: 8 vasos de agua al día</div>
                             <div class="consejo-desc">Esencial para el funcionamiento del organismo</div>
+                        </div>
+                    </div>
+                    <div class="consejo-item">
+                        <div class="consejo-icon ci-purple"><i class="fas fa-utensils"></i></div>
+                        <div class="consejo-text">
+                            <div class="consejo-titulo"> Alimentación balanceada</div>
+                            <div class="consejo-desc">Incluye frutas, verduras y proteínas</div>
                         </div>
                     </div>
                 </div>
@@ -257,7 +275,7 @@
 
             function iniciarIntervalo() {
                 if (interval) clearInterval(interval);
-                interval = setInterval(siguienteConsejo, 4000);
+                interval = setInterval(siguienteConsejo, 5000);
             }
 
             const verMasBtn = document.getElementById('verMasConsejo');
