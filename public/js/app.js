@@ -9779,6 +9779,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ },
 
+/***/ "./frontend/sass/paciente/diagnostico.scss"
+/*!*************************************************!*\
+  !*** ./frontend/sass/paciente/diagnostico.scss ***!
+  \*************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ },
+
 /***/ "./frontend/sass/app.scss"
 /*!********************************!*\
   !*** ./frontend/sass/app.scss ***!
@@ -44967,6 +44980,7 @@ if (false) // removed by dead control flow
 /******/ 			"css/app": 0,
 /******/ 			"css/pacientes": 0,
 /******/ 			"css/cita": 0,
+/******/ 			"css/diagnostico": 0,
 /******/ 			"css/historial": 0
 /******/ 		};
 /******/ 		
@@ -45017,13 +45031,14 @@ if (false) // removed by dead control flow
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/historial"], () => (__webpack_require__("./frontend/js/app.js")))
-/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/historial"], () => (__webpack_require__("./frontend/sass/app.scss")))
-/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/historial"], () => (__webpack_require__("./frontend/sass/landing.scss")))
-/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/historial"], () => (__webpack_require__("./frontend/sass/paciente/agenda_cita.scss")))
-/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/historial"], () => (__webpack_require__("./frontend/sass/medico/cita.scss")))
-/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/historial"], () => (__webpack_require__("./frontend/sass/medico/pacientes.scss")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/historial"], () => (__webpack_require__("./frontend/sass/medico/historial.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/diagnostico","css/historial"], () => (__webpack_require__("./frontend/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/diagnostico","css/historial"], () => (__webpack_require__("./frontend/sass/app.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/diagnostico","css/historial"], () => (__webpack_require__("./frontend/sass/landing.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/diagnostico","css/historial"], () => (__webpack_require__("./frontend/sass/paciente/agenda_cita.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/diagnostico","css/historial"], () => (__webpack_require__("./frontend/sass/medico/cita.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/diagnostico","css/historial"], () => (__webpack_require__("./frontend/sass/medico/pacientes.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/diagnostico","css/historial"], () => (__webpack_require__("./frontend/sass/medico/historial.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/agenda_cita","css/landing","css/app","css/pacientes","css/cita","css/diagnostico","css/historial"], () => (__webpack_require__("./frontend/sass/paciente/diagnostico.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

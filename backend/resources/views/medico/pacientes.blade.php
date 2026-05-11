@@ -104,7 +104,7 @@
                 <div class="stat-icon"><i class="fas fa-prescription"></i></div>
                 <div class="stat-info">
                     <div class="stat-number">{{ $recetasEmitidas ?? 0 }}</div>
-                    <div class="stat-label">Recetas emitidas</div>
+                    <div class="stat-label">Diagnosticos emitidos</div>
                 </div>
             </div>
         </div>

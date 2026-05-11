@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Diagnósticos</title>
+    <title>E&M Laboratorio | Mis Diagnósticos</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/diagnostico.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="dash">
 
@@ -13,131 +16,99 @@
     <nav class="navbar">
         <div class="navbar-brand">
             <div class="brand-icon">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2">
-                    <rect x="11" y="2" width="2" height="20" rx="1"/>
-                    <rect x="2" y="11" width="20" height="2" rx="1"/>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                    <circle cx="12" cy="12" r="3"/>
                 </svg>
             </div>
-            <span class="brand-name">Clínica<span>Salud</span></span>
+            <span class="brand-name">E&M<span>Laboratorio</span></span>
         </div>
         <div class="nav-right">
             <div class="user-info">
-                <div class="user-name">{{ $usuario->nombre }}</div>
-                <div class="user-role">Paciente</div>
+                <div class="user-name">{{ $usuario->nombre ?? 'Usuario' }}</div>
+                <div class="user-role">PACIENTE</div>
             </div>
-            <div class="avatar">{{ strtoupper(substr($usuario->nombre, 0, 1)) }}</div>
+            <div class="avatar">{{ strtoupper(substr($usuario->nombre ?? 'U', 0, 1)) }}</div>
             <a href="{{ route('paciente.dashboard') }}" class="btn-back">← Volver</a>
         </div>
     </nav>
 
     <div class="main">
-        <div class="app-wrapper">
+        <div class="content-wrapper">
 
             {{-- HEADER --}}
             <div class="page-header-simple">
-                <h1>Registro clínico · <span style="font-weight:400; color:#2c7a4d;">Diagnósticos</span></h1>
+                <h1>Registro clínico · <span>Diagnósticos</span></h1>
                 <p>Historial médico estructurado con información diagnóstica, especialistas y recomendaciones.</p>
             </div>
 
-            {{-- FILTROS --}}
-            <div class="filters-section">
-                <div class="filter-group">
-                    <button class="filter-chip active" onclick="filtrar('todos', this)">Todos</button>
-                    <button class="filter-chip" onclick="filtrar('cronico', this)">Crónico</button>
-                    <button class="filter-chip" onclick="filtrar('agudo', this)">Agudo</button>
-                    <button class="filter-chip" onclick="filtrar('preventivo', this)">Preventivo</button>
+            {{-- FILTROS CON SELECT --}}
+            <div class="filters-bar">
+                <div class="filtros-left">
+                    <div class="select-group">
+                        <label><i class="fas fa-filter"></i> Tipo:</label>
+                        <select id="filtroTipo" class="filtro-select">
+                            <option value="todos">Todos los diagnósticos</option>
+                            <option value="cronico">Crónico</option>
+                            <option value="agudo">Agudo</option>
+                            <option value="preventivo">Preventivo</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="search-box">
-                    <input type="text" placeholder="Buscar por patología, médico..." oninput="buscar(this.value)">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchDiagnostico" placeholder="Buscar por patología, médico...">
+                    <button id="limpiarFiltros" class="btn-limpiar">
+                        <i class="fas fa-eraser"></i> Limpiar
+                    </button>
                 </div>
             </div>
 
-            {{-- STATS --}}
+            {{-- ESTADÍSTICAS --}}
             <div class="stats-row">
                 <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
                     <div>
-                        <div class="stat-number">0</div>
+                        <div class="stat-number" id="totalCount">0</div>
                         <div class="stat-label">Total diagnósticos</div>
                     </div>
                 </div>
                 <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
                     <div>
-                        <div class="stat-number">0</div>
+                        <div class="stat-number" id="cronicoCount">0</div>
                         <div class="stat-label">Crónicos</div>
                     </div>
                 </div>
                 <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
                     <div>
-                        <div class="stat-number">0</div>
+                        <div class="stat-number" id="agudoCount">0</div>
                         <div class="stat-label">Agudos</div>
                     </div>
                 </div>
                 <div class="stat-item">
+                    <div class="stat-icon"><i class="fas fa-shield-alt"></i></div>
                     <div>
-                        <div class="stat-number">0</div>
+                        <div class="stat-number" id="preventivoCount">0</div>
                         <div class="stat-label">Preventivos</div>
                     </div>
                 </div>
             </div>
 
-            {{-- TABLA --}}
-            <div class="table-diagnosticos">
+            {{-- TABLA DE DIAGNÓSTICOS --}}
+            <div class="table-container">
                 <table class="diagnostico-table" id="tablaDiagnosticos">
                     <thead>
-                        <tr>
+                        </td>
                             <th>Diagnóstico / condición</th>
                             <th>Tipo</th>
                             <th>Especialista / servicio</th>
                             <th>Fecha</th>
                             <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-tipo="cronico">
-                            <td>
-                                <div class="diagnostico-nombre">Hipertensión arterial</div>
-                                <div class="diagnostico-desc">Presión arterial elevada de forma persistente. Se recomienda control mensual y reducción de sal.</div>
-                            </td>
-                            <td><span class="tipo-badge cronico">Crónico</span></td>
-                            <td>
-                                <div style="font-weight:600; font-size:0.85rem;">Dr. Ramírez López</div>
-                                <div style="font-size:0.75rem; color:#6d8faa;">Cardiología</div>
-                            </td>
-                            <td style="font-size:0.85rem;">15 Mar 2026</td>
-                            <td>
-                                <button class="btn-detalle-link" onclick="verDetalle(this)">Ver detalle</button>
-                            </td>
-                        </tr>
-                        <tr data-tipo="agudo">
-                            <td>
-                                <div class="diagnostico-nombre">Infección respiratoria aguda</div>
-                                <div class="diagnostico-desc">Infección viral de las vías respiratorias superiores. Tratamiento con reposo y antitérmicos.</div>
-                            </td>
-                            <td><span class="tipo-badge agudo">Agudo</span></td>
-                            <td>
-                                <div style="font-weight:600; font-size:0.85rem;">Dra. Torres Vega</div>
-                                <div style="font-size:0.75rem; color:#6d8faa;">Medicina General</div>
-                            </td>
-                            <td style="font-size:0.85rem;">02 Abr 2026</td>
-                            <td>
-                                <button class="btn-detalle-link" onclick="verDetalle(this)">Ver detalle</button>
-                            </td>
-                        </tr>
-                        <tr data-tipo="preventivo">
-                            <td>
-                                <div class="diagnostico-nombre">Chequeo general preventivo</div>
-                                <div class="diagnostico-desc">Examen médico de rutina. Resultados dentro de parámetros normales. Revisión anual recomendada.</div>
-                            </td>
-                            <td><span class="tipo-badge preventivo">Preventivo</span></td>
-                            <td>
-                                <div style="font-weight:600; font-size:0.85rem;">Dr. Herrera Cruz</div>
-                                <div style="font-size:0.75rem; color:#6d8faa;">Neurología</div>
-                            </td>
-                            <td style="font-size:0.85rem;">20 Abr 2026</td>
-                            <td>
-                                <button class="btn-detalle-link" onclick="verDetalle(this)">Ver detalle</button>
-                            </td>
-                        </tr>
+                        </thead>
+                    <tbody id="tableBody">
+                        <!-- Datos dinámicos -->
                     </tbody>
                 </table>
             </div>
@@ -157,54 +128,191 @@
     </div>
 
     <script>
-        function filtrar(tipo, btn) {
-            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.querySelectorAll('#tablaDiagnosticos tbody tr').forEach(row => {
-                row.style.display = (tipo === 'todos' || row.dataset.tipo === tipo) ? '' : 'none';
+        // Datos de diagnósticos
+        const diagnosticosData = [
+            {
+                id: 1,
+                nombre: "Hipertensión arterial",
+                descripcion: "Presión arterial elevada de forma persistente. Se recomienda control mensual y reducción de sal en la dieta.",
+                tipo: "cronico",
+                especialista: "Dr. Ramírez López",
+                servicio: "Cardiología",
+                fecha: "15 Mar 2026",
+                detalle: "Tratamiento: Losartán 50mg/día. Próximo control: 12 Mayo 2026."
+            },
+            {
+                id: 2,
+                nombre: "Infección respiratoria aguda",
+                descripcion: "Infección viral de las vías respiratorias superiores. Tratamiento con reposo y antitérmicos.",
+                tipo: "agudo",
+                especialista: "Dra. Torres Vega",
+                servicio: "Medicina General",
+                fecha: "02 Abr 2026",
+                detalle: "Tratamiento sintomático con paracetamol, ibuprofeno y reposo."
+            },
+            {
+                id: 3,
+                nombre: "Chequeo general preventivo",
+                descripcion: "Examen médico de rutina. Resultados dentro de parámetros normales. Revisión anual recomendada.",
+                tipo: "preventivo",
+                especialista: "Dr. Herrera Cruz",
+                servicio: "Medicina Preventiva",
+                fecha: "20 Abr 2026",
+                detalle: "Resultados normales. Mantener hábitos saludables."
+            },
+            {
+                id: 4,
+                nombre: "Dermatitis atópica",
+                descripcion: "Lesiones eccematosas en pliegues de codos y rodillas, prurito intenso.",
+                tipo: "cronico",
+                especialista: "Dra. Lucía Fuentes",
+                servicio: "Dermatología",
+                fecha: "10 Ene 2026",
+                detalle: "Tratamiento tópico con corticoides."
+            },
+            {
+                id: 5,
+                nombre: "Faringoamigdalitis aguda",
+                descripcion: "Exudado amigdalino bilateral, fiebre y adenopatías cervicales.",
+                tipo: "agudo",
+                especialista: "Dr. Mauricio Peña",
+                servicio: "Otorrinolaringología",
+                fecha: "25 Feb 2026",
+                detalle: "Antibiótico por 10 días."
+            }
+        ];
+
+        let activeFilter = 'todos';
+
+        function renderTable() {
+            const searchTerm = document.getElementById('searchDiagnostico')?.value.toLowerCase() || '';
+            let filtered = [...diagnosticosData];
+
+            if (activeFilter !== 'todos') {
+                filtered = filtered.filter(d => d.tipo === activeFilter);
+            }
+
+            if (searchTerm !== '') {
+                filtered = filtered.filter(d =>
+                    d.nombre.toLowerCase().includes(searchTerm) ||
+                    d.especialista.toLowerCase().includes(searchTerm) ||
+                    d.servicio.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Actualizar estadísticas
+            document.getElementById('totalCount').innerText = diagnosticosData.length;
+            document.getElementById('cronicoCount').innerText = diagnosticosData.filter(d => d.tipo === 'cronico').length;
+            document.getElementById('agudoCount').innerText = diagnosticosData.filter(d => d.tipo === 'agudo').length;
+            document.getElementById('preventivoCount').innerText = diagnosticosData.filter(d => d.tipo === 'preventivo').length;
+
+            const tbody = document.getElementById('tableBody');
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="5">No se encontraron diagnósticos con los filtros seleccionados.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(d => {
+                let badgeClass = '';
+                if (d.tipo === 'cronico') badgeClass = 'cronico';
+                else if (d.tipo === 'agudo') badgeClass = 'agudo';
+                else if (d.tipo === 'preventivo') badgeClass = 'preventivo';
+                let tipoTexto = d.tipo.charAt(0).toUpperCase() + d.tipo.slice(1);
+
+                html += `
+                    <tr data-tipo="${d.tipo}">
+                        <td>
+                            <div class="diagnostico-nombre">${escapeHtml(d.nombre)}</div>
+                            <div class="diagnostico-desc">${escapeHtml(d.descripcion.substring(0, 100))}${d.descripcion.length > 100 ? '…' : ''}</div>
+                        </td>
+                        <td><span class="tipo-badge ${badgeClass}">${tipoTexto}</span></td>
+                        <td>
+                            <div class="medico-nombre">${escapeHtml(d.especialista)}</div>
+                            <div class="medico-especialidad">${escapeHtml(d.servicio)}</div>
+                        </td>
+                        <td class="fecha-cell">${d.fecha}</td>
+                        <td class="actions-cell">
+                            <button class="btn-ver" onclick="verDetalle(${d.id})">Ver detalle</button>
+                        </td>
+                    </tr>
+                `;
             });
+            tbody.innerHTML = html;
         }
 
-        function buscar(valor) {
-            document.querySelectorAll('#tablaDiagnosticos tbody tr').forEach(row => {
-                const nombre = row.querySelector('.diagnostico-nombre').textContent.toLowerCase();
-                row.style.display = nombre.includes(valor.toLowerCase()) ? '' : 'none';
-            });
-        }
+        function verDetalle(id) {
+            const diag = diagnosticosData.find(d => d.id === id);
+            if (!diag) return;
 
-        function verDetalle(btn) {
-            const row = btn.closest('tr');
-            const nombre = row.querySelector('.diagnostico-nombre').textContent;
-            const desc = row.querySelector('.diagnostico-desc').textContent;
-            const medico = row.cells[2].querySelector('div').textContent;
-            const fecha = row.cells[3].textContent.trim();
-            const tipo = row.cells[1].textContent.trim();
+            let tipoTexto = diag.tipo.charAt(0).toUpperCase() + diag.tipo.slice(1);
+            let badgeClass = '';
+            if (diag.tipo === 'cronico') badgeClass = 'cronico';
+            else if (diag.tipo === 'agudo') badgeClass = 'agudo';
+            else if (diag.tipo === 'preventivo') badgeClass = 'preventivo';
 
-            document.getElementById('modalTitulo').textContent = nombre;
+            document.getElementById('modalTitulo').innerHTML = `<i class="fas fa-stethoscope"></i> ${escapeHtml(diag.nombre)}`;
             document.getElementById('modalBody').innerHTML = `
-                <div class="detail-row">
-                    <div class="detail-label">Tipo</div>
-                    <div class="detail-value">${tipo}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Fecha</div>
-                    <div class="detail-value">${fecha}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Médico</div>
-                    <div class="detail-value">${medico}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Descripción</div>
-                    <div class="detail-value">${desc}</div>
+                <div class="detail-section">
+                    <div class="detail-row">
+                        <div class="detail-label">Tipo</div>
+                        <div class="detail-value"><span class="tipo-badge ${badgeClass}">${tipoTexto}</span></div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Fecha</div>
+                        <div class="detail-value">${diag.fecha}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Médico tratante</div>
+                        <div class="detail-value">${escapeHtml(diag.especialista)} · ${escapeHtml(diag.servicio)}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Descripción</div>
+                        <div class="detail-value">${escapeHtml(diag.descripcion)}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Tratamiento / Observaciones</div>
+                        <div class="detail-value">${escapeHtml(diag.detalle)}</div>
+                    </div>
                 </div>
             `;
             document.getElementById('modalOverlay').classList.add('active');
         }
 
+        function limpiarFiltros() {
+            document.getElementById('filtroTipo').value = 'todos';
+            document.getElementById('searchDiagnostico').value = '';
+            activeFilter = 'todos';
+            renderTable();
+        }
+
         function cerrarModal() {
             document.getElementById('modalOverlay').classList.remove('active');
         }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Event listeners
+        document.getElementById('filtroTipo')?.addEventListener('change', function() {
+            activeFilter = this.value;
+            renderTable();
+        });
+
+        document.getElementById('searchDiagnostico')?.addEventListener('input', renderTable);
+        document.getElementById('limpiarFiltros')?.addEventListener('click', limpiarFiltros);
+        document.getElementById('modalOverlay')?.addEventListener('click', function(e) {
+            if (e.target === this) cerrarModal();
+        });
+
+        renderTable();
     </script>
 
 </body>

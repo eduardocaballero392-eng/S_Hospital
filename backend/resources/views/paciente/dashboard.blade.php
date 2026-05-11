@@ -116,14 +116,7 @@
                 <div class="ac-arrow"><i class="fas fa-arrow-right"></i></div>
             </a>
 
-            <a href="{{ route('paciente.recetas') }}" class="action-card">
-                <div class="ac-icon aci-amber"><i class="fas fa-prescription-bottle"></i></div>
-                <div class="ac-text">
-                    <div class="ac-title">Mis recetas</div>
-                    <div class="ac-sub">Ver recetas médicas activas</div>
-                </div>
-                <div class="ac-arrow"><i class="fas fa-arrow-right"></i></div>
-            </a>
+            
 
             <a href="{{ route('paciente.resultados') }}" class="action-card">
                 <div class="ac-icon aci-teal"><i class="fas fa-chart-line"></i></div>
@@ -153,7 +146,7 @@
                             <div class="cita-medico">Dr(a). {{ $proximaCita->medico_nombre }}</div>
                             <div class="cita-especialidad">{{ $proximaCita->especialidad }} · {{ \Carbon\Carbon::parse($proximaCita->fecha_hora)->format('h:i A') }}</div>
                         </div>
-                        <a href="{{ route('paciente.citas') }}" class="cita-accion">
+                        <a class="cita-accion">
                             <i class="fas fa-calendar-check"></i>
                         </a>
                     </div>

@@ -184,4 +184,4 @@ class DiagnosticoController extends Controller
         return redirect()->route('medico.diagnosticos')
             ->with('success', 'Diagnóstico eliminado correctamente');
     }
-}w
+}

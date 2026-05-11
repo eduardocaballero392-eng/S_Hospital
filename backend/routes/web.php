@@ -77,12 +77,7 @@ Route::middleware(['auth'])->prefix('medico')->group(function () {
     Route::get('/pacientes', [App\Http\Controllers\Medico\PacienteController::class, 'index'])->name('medico.pacientes');
     Route::get('/pacientes/{id}/detalle', [App\Http\Controllers\Medico\PacienteController::class, 'detalle'])->name('medico.pacientes.detalle');
     Route::get('/pacientes/{id}/historial', [App\Http\Controllers\Medico\PacienteController::class, 'historial'])->name('medico.pacientes.historial');
-    
-    // ========== RUTAS PARA GESTIÓN DE RECETAS ==========
-    Route::get('/recetas', [App\Http\Controllers\Medico\RecetaController::class, 'index'])->name('medico.recetas');
-    Route::get('/recetas/crear', [App\Http\Controllers\Medico\RecetaController::class, 'crear'])->name('medico.recetas.crear');
-    Route::post('/recetas/store', [App\Http\Controllers\Medico\RecetaController::class, 'store'])->name('medico.recetas.store');
-    Route::get('/recetas/{id}/pdf', [App\Http\Controllers\Medico\RecetaController::class, 'pdf'])->name('medico.recetas.pdf');
+ 
     
     // ========== RUTAS PARA GESTIÓN DE DIAGNÓSTICOS ==========
     Route::get('/diagnosticos', [App\Http\Controllers\Medico\DiagnosticoController::class, 'index'])->name('medico.diagnosticos');
