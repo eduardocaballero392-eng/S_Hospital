@@ -24,9 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // In cloud platforms behind reverse proxies (e.g. Render),
-        // force generated URLs to use HTTPS to avoid mixed content.
-        if ($this->app->environment('production')) {
+        // Detrás de proxy TLS (Render, etc.): URLs absolutas coherentes con APP_URL.
+        $root = (string) config('app.url');
+        if (str_starts_with($root, 'https://') || $this->app->environment('production')) {
             URL::forceScheme('https');
         }
     }

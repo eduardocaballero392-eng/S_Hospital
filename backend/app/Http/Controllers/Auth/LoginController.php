@@ -35,14 +35,14 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         if ((int) $user->rol_id === Rol::ADMIN) {
-            return redirect('/admin/dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
         if ((int) $user->rol_id === Rol::MEDICO) {
-            return redirect('/medico/dashboard');
+            return redirect()->route('medico.dashboard');
         }
 
-        return redirect('/paciente/dashboard');
+        return redirect()->route('paciente.dashboard');
     }
 
     //usar email para login 
