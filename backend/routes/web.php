@@ -18,12 +18,6 @@ Route::post('/citas/guardar', [CitaController::class, 'store'])->name('paciente.
 
 Auth::routes();
 
-// ========== REDIRECCIÓN PERSONALIZADA DESPUÉS DE LOGOUT ==========
-Route::get('/logout', function () {
-    Auth::logout();
-    return redirect()->route('landing');
-})->name('logout');
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // ============================================================

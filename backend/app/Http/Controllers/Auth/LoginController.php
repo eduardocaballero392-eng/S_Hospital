@@ -52,4 +52,12 @@ class LoginController extends Controller
         return 'email';
     }
 
+    /**
+     * Tras cerrar sesión (POST /logout de Auth::routes), redirigir al landing público.
+     */
+    protected function loggedOut(Request $request)
+    {
+        return redirect()->route('landing');
+    }
+
 }
