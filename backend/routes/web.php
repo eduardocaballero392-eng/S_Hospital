@@ -4,6 +4,145 @@ use App\Http\Controllers\Paciente\CitaController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+// ============================================================
+// RUTAS TEMPORALES PARA CREAR USUARIOS (ELIMINAR DESPUÉS)
+// ============================================================
+
+// 1. Crear Administrador Principal
+Route::get('/crear-admin', function () {
+    try {
+        $user = App\Models\User::create([
+            'nombre' => 'Admin Principal',
+            'email' => 'admin@lab.com',
+            'contrasena' => bcrypt('admin123'),
+            'rol_id' => 1,
+            'estado' => 1,
+        ]);
+
+        return "✅ Administrador Principal creado con éxito!<br>
+                📧 Email: <strong>admin@lab.com</strong><br>
+                🔑 Contraseña: <strong>admin123</strong><br>
+                👤 Nombre: Admin Principal<br><br>
+                <a href='/login'>Ir al login →</a>";
+    } catch (Exception $e) {
+        return "❌ Error: " . $e->getMessage();
+    }
+});
+
+// 2. Crear Administrador Secundario
+Route::get('/crear-admin2', function () {
+    try {
+        $user = App\Models\User::create([
+            'nombre' => 'Admin Secundario',
+            'email' => 'admin2@lab.com',
+            'contrasena' => bcrypt('admin456'),
+            'rol_id' => 1,
+            'estado' => 1,
+        ]);
+
+        return "✅ Administrador Secundario creado con éxito!<br>
+                📧 Email: <strong>admin2@lab.com</strong><br>
+                🔑 Contraseña: <strong>admin456</strong><br>
+                👤 Nombre: Admin Secundario<br><br>
+                <a href='/login'>Ir al login →</a>";
+    } catch (Exception $e) {
+        return "❌ Error: " . $e->getMessage();
+    }
+});
+
+// 3. Crear Médico - Dr. Carlos Mendoza
+Route::get('/crear-medico', function () {
+    try {
+        $user = App\Models\User::create([
+            'nombre' => 'Dr. Carlos Mendoza',
+            'email' => 'dr.mendoza@lab.com',
+            'contrasena' => bcrypt('password'),
+            'rol_id' => 3,
+            'estado' => 1,
+        ]);
+
+        $medico = App\Models\Medico::create([
+            'usuario_id' => $user->id,
+            'nombre' => 'Dr. Carlos Mendoza',
+            'especialidad' => 'Cardiología',
+            'telefono' => '987654321',
+            'email' => 'dr.mendoza@lab.com',
+        ]);
+
+        return "✅ Médico creado con éxito!<br>
+                📧 Email: <strong>dr.mendoza@lab.com</strong><br>
+                🔑 Contraseña: <strong>password</strong><br>
+                👤 Nombre: Dr. Carlos Mendoza<br>
+                💊 Especialidad: Cardiología<br><br>
+                <a href='/login'>Ir al login →</a>";
+    } catch (Exception $e) {
+        return "❌ Error: " . $e->getMessage();
+    }
+});
+
+// 4. Crear Médico - Dra. Ana Reyes
+Route::get('/crear-medico2', function () {
+    try {
+        $user = App\Models\User::create([
+            'nombre' => 'Dra. Ana Reyes',
+            'email' => 'dra.reyes@lab.com',
+            'contrasena' => bcrypt('medico2024'),
+            'rol_id' => 3,
+            'estado' => 1,
+        ]);
+
+        $medico = App\Models\Medico::create([
+            'usuario_id' => $user->id,
+            'nombre' => 'Dra. Ana Reyes',
+            'especialidad' => 'Pediatría',
+            'telefono' => '987654322',
+            'email' => 'dra.reyes@lab.com',
+        ]);
+
+        return "✅ Médico creado con éxito!<br>
+                📧 Email: <strong>dra.reyes@lab.com</strong><br>
+                🔑 Contraseña: <strong>medico2024</strong><br>
+                👤 Nombre: Dra. Ana Reyes<br>
+                💊 Especialidad: Pediatría<br><br>
+                <a href='/login'>Ir al login →</a>";
+    } catch (Exception $e) {
+        return "❌ Error: " . $e->getMessage();
+    }
+});
+
+// 5. Crear Paciente de prueba
+Route::get('/crear-paciente', function () {
+    try {
+        $user = App\Models\User::create([
+            'nombre' => 'Juan Pérez',
+            'email' => 'paciente@lab.com',
+            'contrasena' => bcrypt('password'),
+            'rol_id' => 2,
+            'estado' => 1,
+        ]);
+
+        $paciente = App\Models\Paciente::create([
+            'usuario_id' => $user->id,
+            'nombre' => 'Juan',
+            'apellido' => 'Pérez',
+            'DNI' => '12345678',
+            'fecha_nac' => '1990-05-15',
+            'genero' => 'M',
+            'telefono' => '987654321',
+            'email' => 'paciente@lab.com',
+            'direccion' => 'Av. Principal 123',
+        ]);
+
+        return "✅ Paciente creado con éxito!<br>
+                📧 Email: <strong>paciente@lab.com</strong><br>
+                🔑 Contraseña: <strong>password</strong><br>
+                👤 Nombre: Juan Pérez<br><br>
+                <a href='/login'>Ir al login →</a>";
+    } catch (Exception $e) {
+        return "❌ Error: " . $e->getMessage();
+    }
+});
+
 // ========== PÁGINA DE INICIO (LANDING PÚBLICA) ==========
 Route::get('/', function () {
     return view('landing');
