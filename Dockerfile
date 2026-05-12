@@ -9,6 +9,9 @@ RUN apt-get update && apt-get install -y \
 # Habilitar mod_rewrite
 RUN a2enmod rewrite headers
 
+# Evita aviso AH00558 (FQDN) en logs de Apache dentro del contenedor
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
