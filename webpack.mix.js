@@ -22,4 +22,7 @@ mix.js('frontend/js/app.js', 'public/js')
    })
    .sass('frontend/sass/paciente/diagnostico.scss', 'public/css/diagnostico.css', {
     sassOptions: { quietDeps: true }
-});  
+})
+.sass('frontend/sass/admin.scss', 'public/css', {
+    sassOptions: { quietDeps: true }
+});

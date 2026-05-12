@@ -5,6 +5,7 @@
     "/css/app.css": "/css/app.css",
     "/css/pacientes.css": "/css/pacientes.css",
     "/css/cita.css": "/css/cita.css",
+    "/css/admin.css": "/css/admin.css",
     "/css/diagnostico.css": "/css/diagnostico.css",
     "/css/historial.css": "/css/historial.css"
 }

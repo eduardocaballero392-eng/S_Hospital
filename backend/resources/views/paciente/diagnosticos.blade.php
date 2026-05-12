@@ -100,13 +100,15 @@
             <div class="table-container">
                 <table class="diagnostico-table" id="tablaDiagnosticos">
                     <thead>
-                        </td>
+                        <tr>
                             <th>Diagnóstico / condición</th>
                             <th>Tipo</th>
                             <th>Especialista / servicio</th>
-                            <th>Fecha</th>
+                            <th>Fecha diagnóstico</th>
+                            <th>Cita agendada</th>
                             <th></th>
-                        </thead>
+                        </tr>
+                    </thead>
                     <tbody id="tableBody">
                         <!-- Datos dinámicos -->
                     </tbody>
@@ -128,59 +130,7 @@
     </div>
 
     <script>
-        // Datos de diagnósticos
-        const diagnosticosData = [
-            {
-                id: 1,
-                nombre: "Hipertensión arterial",
-                descripcion: "Presión arterial elevada de forma persistente. Se recomienda control mensual y reducción de sal en la dieta.",
-                tipo: "cronico",
-                especialista: "Dr. Ramírez López",
-                servicio: "Cardiología",
-                fecha: "15 Mar 2026",
-                detalle: "Tratamiento: Losartán 50mg/día. Próximo control: 12 Mayo 2026."
-            },
-            {
-                id: 2,
-                nombre: "Infección respiratoria aguda",
-                descripcion: "Infección viral de las vías respiratorias superiores. Tratamiento con reposo y antitérmicos.",
-                tipo: "agudo",
-                especialista: "Dra. Torres Vega",
-                servicio: "Medicina General",
-                fecha: "02 Abr 2026",
-                detalle: "Tratamiento sintomático con paracetamol, ibuprofeno y reposo."
-            },
-            {
-                id: 3,
-                nombre: "Chequeo general preventivo",
-                descripcion: "Examen médico de rutina. Resultados dentro de parámetros normales. Revisión anual recomendada.",
-                tipo: "preventivo",
-                especialista: "Dr. Herrera Cruz",
-                servicio: "Medicina Preventiva",
-                fecha: "20 Abr 2026",
-                detalle: "Resultados normales. Mantener hábitos saludables."
-            },
-            {
-                id: 4,
-                nombre: "Dermatitis atópica",
-                descripcion: "Lesiones eccematosas en pliegues de codos y rodillas, prurito intenso.",
-                tipo: "cronico",
-                especialista: "Dra. Lucía Fuentes",
-                servicio: "Dermatología",
-                fecha: "10 Ene 2026",
-                detalle: "Tratamiento tópico con corticoides."
-            },
-            {
-                id: 5,
-                nombre: "Faringoamigdalitis aguda",
-                descripcion: "Exudado amigdalino bilateral, fiebre y adenopatías cervicales.",
-                tipo: "agudo",
-                especialista: "Dr. Mauricio Peña",
-                servicio: "Otorrinolaringología",
-                fecha: "25 Feb 2026",
-                detalle: "Antibiótico por 10 días."
-            }
-        ];
+        const diagnosticosData = @json($diagnosticosForJs ?? []);
 
         let activeFilter = 'todos';
 
@@ -194,9 +144,10 @@
 
             if (searchTerm !== '') {
                 filtered = filtered.filter(d =>
-                    d.nombre.toLowerCase().includes(searchTerm) ||
-                    d.especialista.toLowerCase().includes(searchTerm) ||
-                    d.servicio.toLowerCase().includes(searchTerm)
+                    (d.nombre || '').toLowerCase().includes(searchTerm) ||
+                    (d.especialista || '').toLowerCase().includes(searchTerm) ||
+                    (d.servicio || '').toLowerCase().includes(searchTerm) ||
+                    (d.fecha_cita || '').toLowerCase().includes(searchTerm)
                 );
             }
 
@@ -208,30 +159,34 @@
 
             const tbody = document.getElementById('tableBody');
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr class="empty-row"><td colspan="5">No se encontraron diagnósticos con los filtros seleccionados.</td></tr>`;
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No se encontraron diagnósticos con los filtros seleccionados.</td></tr>`;
                 return;
             }
 
             let html = '';
             filtered.forEach(d => {
                 let badgeClass = '';
-                if (d.tipo === 'cronico') badgeClass = 'cronico';
-                else if (d.tipo === 'agudo') badgeClass = 'agudo';
-                else if (d.tipo === 'preventivo') badgeClass = 'preventivo';
-                let tipoTexto = d.tipo.charAt(0).toUpperCase() + d.tipo.slice(1);
+                const tipo = d.tipo || 'preventivo';
+                if (tipo === 'cronico') badgeClass = 'cronico';
+                else if (tipo === 'agudo') badgeClass = 'agudo';
+                else if (tipo === 'preventivo') badgeClass = 'preventivo';
+                let tipoTexto = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+                const desc = d.descripcion || '';
+                const fechaCita = d.fecha_cita ? escapeHtml(d.fecha_cita) : '—';
 
                 html += `
-                    <tr data-tipo="${d.tipo}">
+                    <tr data-tipo="${tipo}">
                         <td>
                             <div class="diagnostico-nombre">${escapeHtml(d.nombre)}</div>
-                            <div class="diagnostico-desc">${escapeHtml(d.descripcion.substring(0, 100))}${d.descripcion.length > 100 ? '…' : ''}</div>
+                            <div class="diagnostico-desc">${escapeHtml(desc.substring(0, 100))}${desc.length > 100 ? '…' : ''}</div>
                         </td>
                         <td><span class="tipo-badge ${badgeClass}">${tipoTexto}</span></td>
                         <td>
                             <div class="medico-nombre">${escapeHtml(d.especialista)}</div>
                             <div class="medico-especialidad">${escapeHtml(d.servicio)}</div>
                         </td>
-                        <td class="fecha-cell">${d.fecha}</td>
+                        <td class="fecha-cell">${escapeHtml(d.fecha || '—')}</td>
+                        <td class="fecha-cell">${fechaCita}</td>
                         <td class="actions-cell">
                             <button class="btn-ver" onclick="verDetalle(${d.id})">Ver detalle</button>
                         </td>
@@ -245,11 +200,12 @@
             const diag = diagnosticosData.find(d => d.id === id);
             if (!diag) return;
 
-            let tipoTexto = diag.tipo.charAt(0).toUpperCase() + diag.tipo.slice(1);
+            const tipo = diag.tipo || 'preventivo';
+            let tipoTexto = tipo.charAt(0).toUpperCase() + tipo.slice(1);
             let badgeClass = '';
-            if (diag.tipo === 'cronico') badgeClass = 'cronico';
-            else if (diag.tipo === 'agudo') badgeClass = 'agudo';
-            else if (diag.tipo === 'preventivo') badgeClass = 'preventivo';
+            if (tipo === 'cronico') badgeClass = 'cronico';
+            else if (tipo === 'agudo') badgeClass = 'agudo';
+            else if (tipo === 'preventivo') badgeClass = 'preventivo';
 
             document.getElementById('modalTitulo').innerHTML = `<i class="fas fa-stethoscope"></i> ${escapeHtml(diag.nombre)}`;
             document.getElementById('modalBody').innerHTML = `
@@ -259,8 +215,12 @@
                         <div class="detail-value"><span class="tipo-badge ${badgeClass}">${tipoTexto}</span></div>
                     </div>
                     <div class="detail-row">
-                        <div class="detail-label">Fecha</div>
-                        <div class="detail-value">${diag.fecha}</div>
+                        <div class="detail-label">Fecha del diagnóstico</div>
+                        <div class="detail-value">${escapeHtml(diag.fecha || '—')}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Cita agendada</div>
+                        <div class="detail-value">${diag.fecha_cita ? escapeHtml(diag.fecha_cita) : 'No vinculada a una cita'}</div>
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">Médico tratante</div>
@@ -268,11 +228,7 @@
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">Descripción</div>
-                        <div class="detail-value">${escapeHtml(diag.descripcion)}</div>
-                    </div>
-                    <div class="detail-row">
-                        <div class="detail-label">Tratamiento / Observaciones</div>
-                        <div class="detail-value">${escapeHtml(diag.detalle)}</div>
+                        <div class="detail-value">${escapeHtml(diag.descripcion || '')}</div>
                     </div>
                 </div>
             `;

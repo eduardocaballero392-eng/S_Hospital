@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Paciente extends Model
 {
-    protected $table = 'pacientes'; 
-
+    protected $table = 'pacientes';
     public $timestamps = false;
 
     protected $fillable = [
@@ -20,61 +19,46 @@ class Paciente extends Model
         'telefono',
         'email',
         'direccion',
+        'medico_asignado_id',
     ];
 
-    // Relación con usuario (opcional)
+    // Relación con usuario
     public function usuario()
     {
         return $this->belongsTo(User::class, 'usuario_id');
     }
 
-    // ========== RELACIONES NUEVAS ==========
-    
-    /**
-     * Relación con las citas
-     */
+    // Relación con médico asignado
+    public function medicoAsignado()
+    {
+        return $this->belongsTo(Medico::class, 'medico_asignado_id');
+    }
+
+    // Relación con citas
     public function citas()
     {
         return $this->hasMany(Cita::class, 'paciente_id');
     }
-    
-    /**
-     * Relación con los diagnósticos
-     */
+
+    // Relación con diagnósticos
     public function diagnosticos()
     {
         return $this->hasMany(Diagnostico::class, 'paciente_id');
     }
-    
-    /**
-     * Relación con las recetas
-     */
-    public function recetas()
-    {
-        return $this->hasMany(Receta::class, 'paciente_id');
-    }
-    
-    /**
-     * Relación con los resultados
-     */
+
+    // Relación con resultados
     public function resultados()
     {
         return $this->hasMany(Resultado::class, 'paciente_id');
     }
-    
-    // ========== ACCESOR ==========
-    
-    /**
-     * Obtener el nombre completo
-     */
+
+    // Accesor para nombre completo
     public function getNombreCompletoAttribute()
     {
         return $this->nombre . ' ' . $this->apellido;
     }
-    
-    /**
-     * Calcular edad a partir de fecha de nacimiento
-     */
+
+    // Accesor para edad
     public function getEdadAttribute()
     {
         if ($this->fecha_nac) {

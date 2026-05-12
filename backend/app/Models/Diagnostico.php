@@ -13,8 +13,10 @@ class Diagnostico extends Model
     protected $fillable = [
         'paciente_id',
         'medico_id',
+        'cita_id',
         'nombre',
         'descripcion',
+        'tipo',
         'fecha_diagnostico',
         'created_at',
     ];
@@ -34,5 +36,10 @@ class Diagnostico extends Model
     public function medico()
     {
         return $this->belongsTo(Medico::class, 'medico_id');
+    }
+
+    public function cita()
+    {
+        return $this->belongsTo(Cita::class, 'cita_id');
     }
 }

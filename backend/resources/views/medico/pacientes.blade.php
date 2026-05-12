@@ -101,10 +101,10 @@
                 </div>
             </div>
             <div class="stat-card-paciente">
-                <div class="stat-icon"><i class="fas fa-prescription"></i></div>
+                <div class="stat-icon"><i class="fas fa-file-medical"></i></div>
                 <div class="stat-info">
-                    <div class="stat-number">{{ $recetasEmitidas ?? 0 }}</div>
-                    <div class="stat-label">Diagnosticos emitidos</div>
+                    <div class="stat-number">{{ $diagnosticosRegistrados ?? 0 }}</div>
+                    <div class="stat-label">Diagnósticos registrados</div>
                 </div>
             </div>
         </div>
@@ -203,12 +203,7 @@
                                 <button class="btn-ver-historial" onclick="verHistorialPaciente({{ $paciente->id }})" title="Ver historial clínico">
                                     <i class="fas fa-history"></i>
                                 </button>
-                                <button class="btn-agendar-cita" onclick="agendarCita({{ $paciente->id }})" title="Agendar cita">
-                                    <i class="fas fa-calendar-plus"></i>
-                                </button>
-                                <button class="btn-receta" onclick="crearReceta({{ $paciente->id }})" title="Crear receta">
-                                    <i class="fas fa-prescription-bottle"></i>
-                                </button>
+                                
                                 <button class="btn-diagnostico" onclick="crearDiagnostico({{ $paciente->id }})" title="Registrar diagnóstico">
                                     <i class="fas fa-file-alt"></i>
                                 </button>
@@ -309,11 +304,6 @@
     // Agendar cita
     function agendarCita(pacienteId) {
         window.location.href = `/medico/citas/agendar?paciente=${pacienteId}`;
-    }
-    
-    // Crear receta
-    function crearReceta(pacienteId) {
-        window.location.href = `/medico/recetas/crear?paciente=${pacienteId}`;
     }
     
     // Crear diagnóstico
@@ -527,14 +517,6 @@
     }
     .btn-agendar-cita:hover {
         background: #1a5fa8;
-        color: white;
-    }
-    .btn-receta {
-        background: #e2e8f0;
-        color: #f59e0b;
-    }
-    .btn-receta:hover {
-        background: #f59e0b;
         color: white;
     }
     .btn-diagnostico {

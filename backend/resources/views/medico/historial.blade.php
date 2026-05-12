@@ -114,9 +114,6 @@
             <button class="tab-btn active" data-tab="diagnosticos">
                 <i class="fas fa-file-alt"></i> Diagnósticos
             </button>
-            <button class="tab-btn" data-tab="recetas">
-                <i class="fas fa-prescription-bottle"></i> Recetas
-            </button>
             <button class="tab-btn" data-tab="resultados">
                 <i class="fas fa-chart-line"></i> Resultados
             </button>
@@ -138,10 +135,15 @@
                     <div class="lista-historial">
                         @foreach($diagnosticos as $diagnostico)
                         <div class="historial-item">
-                            <div class="item-fecha">{{ \Carbon\Carbon::parse($diagnostico->created_at)->format('d/m/Y') }}</div>
+                            <div class="item-fecha">{{ \Carbon\Carbon::parse($diagnostico->fecha_diagnostico ?? $diagnostico->created_at)->format('d/m/Y') }}</div>
                             <div class="item-contenido">
                                 <div class="item-titulo">{{ $diagnostico->nombre }}</div>
                                 <div class="item-descripcion">{{ $diagnostico->descripcion }}</div>
+                                @if($diagnostico->cita)
+                                    <div class="item-meta" style="font-size:0.75rem;color:#64748b;margin-top:0.35rem;">
+                                        <i class="fas fa-calendar-check"></i> Cita agendada: {{ \Carbon\Carbon::parse($diagnostico->cita->fecha_hora)->locale('es')->isoFormat('D [de] MMMM YYYY, HH:mm') }}
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         @endforeach
@@ -150,36 +152,6 @@
                     <div class="empty-historial">
                         <i class="fas fa-stethoscope"></i>
                         <p>No hay diagnósticos registrados</p>
-                    </div>
-                @endif
-            </div>
-        </div>
-
-        {{-- CONTENIDO DE RECETAS --}}
-        <div class="tab-content" id="tab-recetas">
-            <div class="historial-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-prescription-bottle"></i> Historial de recetas</h3>
-                    <button class="btn-nuevo" onclick="nuevaReceta({{ $pacienteSeleccionado->id }})">
-                        <i class="fas fa-plus"></i> Nueva receta
-                    </button>
-                </div>
-                @if(isset($recetas) && count($recetas) > 0)
-                    <div class="lista-historial">
-                        @foreach($recetas as $receta)
-                        <div class="historial-item">
-                            <div class="item-fecha">{{ \Carbon\Carbon::parse($receta->created_at)->format('d/m/Y') }}</div>
-                            <div class="item-contenido">
-                                <div class="item-titulo">{{ $receta->medicamento }}</div>
-                                <div class="item-descripcion">{{ $receta->indicaciones }}</div>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                @else
-                    <div class="empty-historial">
-                        <i class="fas fa-prescription-bottle"></i>
-                        <p>No hay recetas registradas</p>
                     </div>
                 @endif
             </div>
@@ -274,10 +246,6 @@
     // ========== FUNCIONES DE NAVEGACIÓN ==========
     function nuevoDiagnostico(pacienteId) {
         window.location.href = `/medico/diagnosticos/crear?paciente=${pacienteId}`;
-    }
-    
-    function nuevaReceta(pacienteId) {
-        window.location.href = `/medico/recetas/crear?paciente=${pacienteId}`;
     }
     
     function agendarCita(pacienteId) {

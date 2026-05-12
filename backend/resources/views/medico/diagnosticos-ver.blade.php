@@ -32,7 +32,6 @@
             <a href="{{ route('medico.dashboard') }}" class="nav-item">Dashboard</a>
             <a href="{{ route('medico.citas') }}" class="nav-item">Mis citas</a>
             <a href="{{ route('medico.pacientes') }}" class="nav-item">Mis pacientes</a>
-            <a href="{{ route('medico.recetas') }}" class="nav-item">Recetas</a>
             <a href="{{ route('medico.diagnosticos') }}" class="nav-item active">Diagnósticos</a>
             <a href="{{ route('medico.historial') }}" class="nav-item">Historial clínico</a>
             <a href="{{ route('medico.perfil') }}" class="nav-item">Mi perfil</a>
@@ -77,6 +76,18 @@
                         <div class="info-label"><i class="fas fa-calendar-alt"></i> Fecha:</div>
                         <div class="info-value">{{ \Carbon\Carbon::parse($diagnostico->fecha_diagnostico)->format('d/m/Y') }}</div>
                     </div>
+                    @if($diagnostico->tipo)
+                    <div class="info-row">
+                        <div class="info-label"><i class="fas fa-tag"></i> Tipo:</div>
+                        <div class="info-value">{{ ucfirst($diagnostico->tipo) }}</div>
+                    </div>
+                    @endif
+                    @if($diagnostico->cita)
+                    <div class="info-row">
+                        <div class="info-label"><i class="fas fa-calendar-check"></i> Cita agendada:</div>
+                        <div class="info-value">{{ $diagnostico->cita->fecha_hora->locale('es')->isoFormat('D [de] MMMM YYYY, HH:mm') }}</div>
+                    </div>
+                    @endif
                     <div class="info-row">
                         <div class="info-label"><i class="fas fa-align-left"></i> Descripción:</div>
                         <div class="info-value descripcion">{{ $diagnostico->descripcion }}</div>

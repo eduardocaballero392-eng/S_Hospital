@@ -22,21 +22,20 @@
             </div>
             <span class="brand-name">E&M<span>Laboratorio</span></span>
         </div>
-        <<div class="nav-right">
-    <div class="user-info">
-        <div class="user-name">{{ $usuario->nombre ?? 'Usuario' }}</div>
-        <div class="user-role">PACIENTE</div>
-    </div>
-    <div class="avatar">{{ strtoupper(substr($usuario->nombre ?? 'U', 0, 1)) }}</div>
-    
-    {{-- BOTÓN DE SALIR / CERRAR SESIÓN --}}
-    <form method="POST" action="{{ route('logout') }}" class="logout-form">
-        @csrf
-        <button type="submit" class="logout-btn" title="Cerrar sesión">
-            <i class="fas fa-sign-out-alt"></i>
-        </button>
-    </form>
-</div>
+        <div class="nav-right">
+            <div class="user-info">
+                <div class="user-name">{{ $usuario->nombre ?? 'Usuario' }}</div>
+                <div class="user-role">PACIENTE</div>
+            </div>
+            <div class="avatar">{{ strtoupper(substr($usuario->nombre ?? 'U', 0, 1)) }}</div>
+            
+            <form method="POST" action="{{ route('logout') }}" class="logout-form">
+                @csrf
+                <button type="submit" class="logout-btn" title="Cerrar sesión">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </form>
+        </div>
     </nav>
 
     {{-- ============================== MAIN CONTENT ============================== --}}
@@ -57,54 +56,68 @@
                     </div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-flask"></i>
+                    <i class="fas fa-notes-medical"></i>
                     <div class="stat-info">
-                        <div class="stat-number">{{ $resultadosPendientes ?? 0 }}</div>
-                        <div class="stat-label">Resultados nuevos</div>
+                        <div class="stat-number">{{ $totalDiagnosticos ?? 0 }}</div>
+                        <div class="stat-label">Diagnósticos</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- SECCIÓN: MIS RESULTADOS --}}
+        {{-- SECCIÓN: DIAGNÓSTICOS RECIENTES --}}
         <div class="section-label">
-            Resultados recientes
+            Diagnósticos recientes
         </div>
-        <div class="resultados-destacados">
-            @if(isset($resultados) && count($resultados) > 0)
-                @foreach($resultados->take(2) as $resultado)
-                <div class="resultado-card">
-                    <div class="resultado-icon">
-                        <i class="fas fa-flask"></i>
+        <div class="resultados-destacados diagnosticos-dash-block">
+            @if(isset($diagnosticosRecientes) && $diagnosticosRecientes->count() > 0)
+                @foreach($diagnosticosRecientes as $diag)
+                <div class="resultado-card diag-dash-card">
+                    <div class="resultado-icon diag-dash-icon">
+                        <i class="fas fa-notes-medical"></i>
                     </div>
                     <div class="resultado-info">
-                        <div class="resultado-nombre">{{ $resultado->nombre_examen }}</div>
-                        <div class="resultado-fecha">{{ $resultado->fecha_resultado }}</div>
-                        <div class="resultado-estado {{ $resultado->estado }}">
-                            <i class="fas {{ $resultado->estado == 'normal' ? 'fa-check-circle' : 'fa-exclamation-triangle' }}"></i>
-                            {{ ucfirst($resultado->estado) }}
+                        <div class="resultado-nombre">{{ $diag->nombre }}</div>
+                        @if($diag->tipo)
+                            <div class="diag-tipo-pill">{{ ucfirst($diag->tipo) }}</div>
+                        @endif
+                        <div class="resultado-fecha diag-dash-meta">
+                            <span><i class="fas fa-calendar-day"></i> Registrado: {{ $diag->fecha_diagnostico ? $diag->fecha_diagnostico->locale('es')->isoFormat('D MMM YYYY') : '—' }}</span>
+                            @if($diag->cita?->fecha_hora)
+                                <span class="diag-cita-line"><i class="fas fa-link"></i> Cita: {{ $diag->cita->fecha_hora->locale('es')->isoFormat('D MMM YYYY, HH:mm') }}</span>
+                            @endif
                         </div>
+                        <div class="diag-medico-line">
+                            <i class="fas fa-user-md"></i> {{ $diag->medico ? $diag->medico->nombreParaMostrar() : 'Médico' }}
+                            @php $espDiag = $diag->medico ? $diag->medico->especialidadParaMostrar() : ''; @endphp
+                            @if($espDiag !== '')
+                                <span class="diag-esp">· {{ $espDiag }}</span>
+                            @endif
+                        </div>
+                        @if($diag->descripcion)
+                            <div class="diag-desc-preview">{{ \Illuminate\Support\Str::limit(strip_tags($diag->descripcion), 120) }}</div>
+                        @endif
                     </div>
-                    <a href="{{ route('paciente.resultados') }}" class="resultado-ver">
+                    <a href="{{ route('paciente.diagnosticos') }}" class="resultado-ver">
                         Ver <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
                 @endforeach
-                <a href="{{ route('paciente.resultados') }}" class="ver-todos-link">
-                    Ver todos mis resultados <i class="fas fa-arrow-right"></i>
+                <a href="{{ route('paciente.diagnosticos') }}" class="ver-todos-link">
+                    Ver todos mis diagnósticos <i class="fas fa-arrow-right"></i>
                 </a>
             @else
                 <div class="resultado-vacio">
-                    <i class="fas fa-chart-line"></i>
-                    <p>Aún no tienes resultados disponibles.</p>
-                    <span>Cuando tengas exámenes listos, aparecerán aquí.</span>
+                    <i class="fas fa-notes-medical"></i>
+                    <p>Aún no hay diagnósticos en tu cuenta.</p>
+                    <span>Si tu médico ya te registró en el sistema, aquí aparecerán sus diagnósticos.</span>
                 </div>
             @endif
         </div>
 
         {{-- ACCIONES RÁPIDAS --}}
         <div class="section-label">
-        Acciones rápidas
+            Acciones rápidas
         </div>
         <div class="actions-grid">
             <a href="{{ route('paciente.diagnosticos') }}" class="action-card">
@@ -112,17 +125,6 @@
                 <div class="ac-text">
                     <div class="ac-title">Mis diagnósticos</div>
                     <div class="ac-sub">Ver historial clínico</div>
-                </div>
-                <div class="ac-arrow"><i class="fas fa-arrow-right"></i></div>
-            </a>
-
-            
-
-            <a href="{{ route('paciente.resultados') }}" class="action-card">
-                <div class="ac-icon aci-teal"><i class="fas fa-chart-line"></i></div>
-                <div class="ac-text">
-                    <div class="ac-title">Todos los resultados</div>
-                    <div class="ac-sub">Ver historial completo de exámenes</div>
                 </div>
                 <div class="ac-arrow"><i class="fas fa-arrow-right"></i></div>
             </a>
@@ -137,14 +139,18 @@
                     <a href="{{ route('paciente.citas') }}" class="panel-link">Ver todas →</a>
                 </div>
                 @if(isset($proximaCita))
+                    @php
+                        $fh = \Carbon\Carbon::parse($proximaCita->fecha_hora)->timezone(config('app.timezone'))->locale('es');
+                        $nomMed = preg_replace('/^(Dr\.?\s*|Dra\.?\s*|doctora?\s+)/iu', '', trim((string) ($proximaCita->medico_nombre ?? '')));
+                    @endphp
                     <div class="cita-card">
                         <div class="cita-fecha">
-                            <div class="cita-dia">{{ \Carbon\Carbon::parse($proximaCita->fecha_hora)->format('d') }}</div>
-                            <div class="cita-mes">{{ \Carbon\Carbon::parse($proximaCita->fecha_hora)->translatedFormat('M') }}</div>
+                            <div class="cita-dia">{{ $fh->format('d') }}</div>
+                            <div class="cita-mes">{{ strtoupper($fh->translatedFormat('M')) }}</div>
                         </div>
                         <div class="cita-info">
-                            <div class="cita-medico">Dr(a). {{ $proximaCita->medico_nombre }}</div>
-                            <div class="cita-especialidad">{{ $proximaCita->especialidad }} · {{ \Carbon\Carbon::parse($proximaCita->fecha_hora)->format('h:i A') }}</div>
+                            <div class="cita-medico">Dr(a). {{ $nomMed !== '' ? $nomMed : 'Por asignar' }}</div>
+                            <div class="cita-especialidad">{{ $proximaCita->especialidad }} · {{ $fh->format('h:i A') }}</div>
                         </div>
                         <a class="cita-accion">
                             <i class="fas fa-calendar-check"></i>
@@ -169,7 +175,7 @@
                     <div class="consejo-item active">
                         <div class="consejo-icon ci-blue"><i class="fas fa-clock"></i></div>
                         <div class="consejo-text">
-                            <div class="consejo-titulo"> Toma tu medicación a tiempo</div>
+                            <div class="consejo-titulo">💊 Toma tu medicación a tiempo</div>
                             <div class="consejo-desc">Recordatorio diario · No olvides tomarlo con agua</div>
                         </div>
                     </div>
@@ -183,21 +189,21 @@
                     <div class="consejo-item">
                         <div class="consejo-icon ci-teal"><i class="fas fa-heartbeat"></i></div>
                         <div class="consejo-text">
-                            <div class="consejo-titulo">Controla tu presión arterial</div>
+                            <div class="consejo-titulo">❤️ Controla tu presión arterial</div>
                             <div class="consejo-desc">Mídela cada 2 días y anota los valores</div>
                         </div>
                     </div>
                     <div class="consejo-item">
                         <div class="consejo-icon ci-amber"><i class="fas fa-tint"></i></div>
                         <div class="consejo-text">
-                            <div class="consejo-titulo"> Hidratación: 8 vasos de agua al día</div>
+                            <div class="consejo-titulo">💧 Hidratación: 8 vasos de agua al día</div>
                             <div class="consejo-desc">Esencial para el funcionamiento del organismo</div>
                         </div>
                     </div>
                     <div class="consejo-item">
                         <div class="consejo-icon ci-purple"><i class="fas fa-utensils"></i></div>
                         <div class="consejo-text">
-                            <div class="consejo-titulo"> Alimentación balanceada</div>
+                            <div class="consejo-titulo">🍎 Alimentación balanceada</div>
                             <div class="consejo-desc">Incluye frutas, verduras y proteínas</div>
                         </div>
                     </div>
@@ -227,6 +233,55 @@
             <button onclick="sendMessage()" id="sendBtn">➤</button>
         </div>
     </div>
+
+    <style>
+        .diagnosticos-dash-block {
+            display: grid;
+            gap: 1rem;
+        }
+        @media (min-width: 900px) {
+            .diagnosticos-dash-block {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        .diag-dash-icon {
+            background: linear-gradient(135deg, #0d9e75, #1a5fa8) !important;
+        }
+        .diag-tipo-pill {
+            display: inline-block;
+            margin-top: 0.35rem;
+            padding: 0.15rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: capitalize;
+            background: #ecfdf5;
+            color: #047857;
+        }
+        .diag-dash-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-top: 0.4rem;
+            font-size: 0.78rem;
+            color: #475569;
+        }
+        .diag-dash-meta i { margin-right: 0.35rem; color: #1a5fa8; }
+        .diag-cita-line { color: #0d9488; font-weight: 500; }
+        .diag-medico-line {
+            margin-top: 0.45rem;
+            font-size: 0.8rem;
+            color: #334155;
+        }
+        .diag-medico-line i { color: #1a5fa8; margin-right: 0.35rem; }
+        .diag-esp { color: #64748b; font-weight: 400; }
+        .diag-desc-preview {
+            margin-top: 0.5rem;
+            font-size: 0.78rem;
+            line-height: 1.35;
+            color: #64748b;
+        }
+    </style>
 
     <script>
         // Carrusel de consejos

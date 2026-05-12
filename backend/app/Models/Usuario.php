@@ -52,6 +52,20 @@ class Usuario extends Authenticatable
     {
         return $this->belongsTo(Paciente::class, 'paciente_id');
     }
+
+    /**
+     * @see \App\Models\User::resolvePacienteId()
+     */
+    public function resolvePacienteId(): ?int
+    {
+        if ($this->paciente_id) {
+            return (int) $this->paciente_id;
+        }
+
+        $id = Paciente::query()->where('usuario_id', $this->id)->value('id');
+
+        return $id !== null ? (int) $id : null;
+    }
     
     /**
      * Relación con el médico (si es médico)
@@ -92,7 +106,31 @@ class Usuario extends Authenticatable
      */
     public function isActive()
     {
-        return $this->estado == 1;
+        return $this->isEstadoActivo();
+    }
+
+    /**
+     * @see \App\Models\User::isEstadoActivo()
+     */
+    public function isEstadoActivo(): bool
+    {
+        $e = $this->estado;
+
+        if ($e === true || $e === 1) {
+            return true;
+        }
+
+        if ($e === false || $e === 0) {
+            return false;
+        }
+
+        if (is_string($e)) {
+            $t = strtolower(trim($e));
+
+            return in_array($t, ['1', 'true', 'activo', 'active', 'si', 'sí', 'enabled'], true);
+        }
+
+        return false;
     }
     
     // ========== ACCESORES ==========

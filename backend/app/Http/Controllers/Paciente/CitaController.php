@@ -85,7 +85,7 @@ class CitaController extends Controller
                     'contrasena'  => Hash::make($request->dni),
                     'rol_id'      => Rol::PACIENTE,
                     'estado'      => 'activo',
-                    'paciente_id' => null,
+                    
                 ]);
 
                 $cuentaNueva  = true;
@@ -122,9 +122,8 @@ class CitaController extends Controller
             if (!$paciente->usuario_id || $paciente->usuario_id != $usuarioVinculado->id) {
                 $paciente->update(['usuario_id' => $usuarioVinculado->id]);
             }
-            if (empty($usuarioVinculado->paciente_id) || $usuarioVinculado->paciente_id != $paciente->id) {
-                $usuarioVinculado->update(['paciente_id' => $paciente->id]);
-            }
+
+           
 
             // Enviar correo solo cuando la cuenta se creó en este flujo.
             if ($cuentaNueva && $request->filled('email')) {
@@ -139,13 +138,15 @@ class CitaController extends Controller
         }
 
         // ──────────────────────────────────────────
-        // 3️⃣ Guardar la Cita
+        // 3️⃣ Guardar la Cita (fecha/hora elegidas = zona horaria del laboratorio, ver APP_TIMEZONE)
         // ──────────────────────────────────────────
+        $fechaHora = Carbon::parse($request->fecha_hora, config('app.timezone'));
+
         Cita::create([
             'paciente_id' => $paciente->id,
             'medico_id'   => null,
             'sala_id'     => null,
-            'fecha_hora'  => $request->fecha_hora,
+            'fecha_hora'  => $fechaHora,
             'estado'      => 'pendiente',
             'motivo'      => $request->motivo,
             'tipo'        => $request->tipo,

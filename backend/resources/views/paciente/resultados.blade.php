@@ -130,53 +130,7 @@
     </div>
 
     <script>
-        // Datos de resultados
-        const resultadosData = [
-            {
-                id: 1,
-                nombre: "Hemograma completo",
-                descripcion: "Análisis completo de sangre incluyendo glóbulos rojos, blancos y plaquetas.",
-                tipo: "laboratorio",
-                especialista: "Dr. Ramírez López",
-                servicio: "Cardiología",
-                fecha: "15 Mar 2026",
-                estado: "normal",
-                detalle: "Glóbulos rojos: 5.2 M/μL, Glóbulos blancos: 7.5 K/μL, Plaquetas: 250 K/μL"
-            },
-            {
-                id: 2,
-                nombre: "Glucosa en ayunas",
-                descripcion: "Medición de nivel de glucosa en sangre tras 8 horas de ayuno.",
-                tipo: "laboratorio",
-                especialista: "Dra. Torres Vega",
-                servicio: "Medicina General",
-                fecha: "02 Abr 2026",
-                estado: "atencion",
-                detalle: "Glucosa: 135 mg/dL (valor normal: 70-99 mg/dL)"
-            },
-            {
-                id: 3,
-                nombre: "Radiografía de tórax",
-                descripcion: "Estudio radiológico de tórax en proyección posteroanterior y lateral.",
-                tipo: "imagen",
-                especialista: "Dr. Herrera Cruz",
-                servicio: "Medicina Preventiva",
-                fecha: "20 Abr 2026",
-                estado: "normal",
-                detalle: "Sin alteraciones significativas. Campos pulmonares sin lesiones."
-            },
-            {
-                id: 4,
-                nombre: "Electrocardiograma",
-                descripcion: "Registro de la actividad eléctrica del corazón en reposo.",
-                tipo: "electrocardiograma",
-                especialista: "Dr. Ramírez López",
-                servicio: "Cardiología",
-                fecha: "25 Abr 2026",
-                estado: "normal",
-                detalle: "Ritmo sinusal regular. Frecuencia cardiaca: 72 lpm. Sin alteraciones."
-            }
-        ];
+        const resultadosData = @json($resultadosForJs ?? []);
 
         let activeFilter = 'todos';
 
@@ -197,10 +151,10 @@
             }
 
             // Actualizar estadísticas
-            document.getElementById('totalCount').innerText = resultadosData.length;
-            document.getElementById('laboratorioCount').innerText = resultadosData.filter(d => d.tipo === 'laboratorio').length;
-            document.getElementById('imagenCount').innerText = resultadosData.filter(d => d.tipo === 'imagen').length;
-            document.getElementById('ecgCount').innerText = resultadosData.filter(d => d.tipo === 'electrocardiograma').length;
+            document.getElementById('totalCount').innerText = String(resultadosData.length);
+            document.getElementById('laboratorioCount').innerText = String(resultadosData.filter(d => d.tipo === 'laboratorio').length);
+            document.getElementById('imagenCount').innerText = String(resultadosData.filter(d => d.tipo === 'imagen').length);
+            document.getElementById('ecgCount').innerText = String(resultadosData.filter(d => d.tipo === 'electrocardiograma').length);
 
             const tbody = document.getElementById('tableBody');
             if (filtered.length === 0) {
@@ -240,7 +194,7 @@
                     <tr data-tipo="${d.tipo}">
                         <td>
                             <div class="examen-nombre">${escapeHtml(d.nombre)}</div>
-                            <div class="examen-desc">${escapeHtml(d.descripcion.substring(0, 80))}${d.descripcion.length > 80 ? '…' : ''}</div>
+                            <div class="examen-desc">${escapeHtml((d.descripcion || '').substring(0, 80))}${(d.descripcion || '').length > 80 ? '…' : ''}</div>
                         </td>
                         <td><span class="tipo-badge ${badgeClass}">${tipoTexto}</span></td>
                         <td>

@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Reclamacion extends Model
 {
     protected $table = 'reclamaciones';
-
     public $timestamps = false;
 
     protected $fillable = [

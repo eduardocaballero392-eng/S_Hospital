@@ -32,7 +32,6 @@
             <a href="{{ route('medico.dashboard') }}" class="nav-item">Dashboard</a>
             <a href="{{ route('medico.citas') }}" class="nav-item">Mis citas</a>
             <a href="{{ route('medico.pacientes') }}" class="nav-item">Mis pacientes</a>
-            <a href="{{ route('medico.recetas') }}" class="nav-item">Recetas</a>
             <a href="{{ route('medico.diagnosticos') }}" class="nav-item active">Diagnósticos</a>
             <a href="{{ route('medico.historial') }}" class="nav-item">Historial clínico</a>
             <a href="{{ route('medico.perfil') }}" class="nav-item">Mi perfil</a>
@@ -60,13 +59,31 @@
 
                 <div class="form-group">
                     <label><i class="fas fa-user"></i> Paciente</label>
-                    <select name="paciente_id" class="form-control" required>
+                    <select name="paciente_id" id="selectPacienteDiagnostico" class="form-control" required>
                         <option value="">Seleccione un paciente</option>
                         @foreach($pacientes as $paciente)
-                            <option value="{{ $paciente->id }}" {{ $diagnostico->paciente_id == $paciente->id ? 'selected' : '' }}>
+                            <option value="{{ $paciente->id }}" {{ (int) old('paciente_id', $diagnostico->paciente_id) === (int) $paciente->id ? 'selected' : '' }}>
                                 {{ $paciente->nombre }} {{ $paciente->apellido ?? '' }} - {{ $paciente->DNI ?? 'Sin DNI' }}
                             </option>
                         @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-link"></i> Vincular a cita agendada (opcional)</label>
+                    <select name="cita_id" id="selectCitaDiagnostico" class="form-control">
+                        <option value="">— Sin vincular —</option>
+                    </select>
+                    <small style="color:#64748b;font-size:0.75rem;">Incluye citas creadas desde la web del laboratorio.</small>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Tipo</label>
+                    <select name="tipo" class="form-control">
+                        @php $tipoSel = old('tipo', $diagnostico->tipo ?? 'preventivo'); @endphp
+                        <option value="preventivo" {{ $tipoSel === 'preventivo' ? 'selected' : '' }}>Preventivo</option>
+                        <option value="agudo" {{ $tipoSel === 'agudo' ? 'selected' : '' }}>Agudo</option>
+                        <option value="cronico" {{ $tipoSel === 'cronico' ? 'selected' : '' }}>Crónico</option>
                     </select>
                 </div>
 
@@ -77,7 +94,7 @@
 
                 <div class="form-group">
                     <label><i class="fas fa-calendar-alt"></i> Fecha del diagnóstico</label>
-                    <input type="date" name="fecha_diagnostico" class="form-control" value="{{ old('fecha_diagnostico', $diagnostico->fecha_diagnostico) }}" required>
+                    <input type="date" name="fecha_diagnostico" class="form-control" value="{{ old('fecha_diagnostico', $diagnostico->fecha_diagnostico ? \Carbon\Carbon::parse($diagnostico->fecha_diagnostico)->format('Y-m-d') : '') }}" required>
                 </div>
 
                 <div class="form-group">
@@ -183,6 +200,29 @@
         box-shadow: 0 4px 12px rgba(26, 95, 168, 0.3);
     }
 </style>
+
+<script>
+    const citasPorPaciente = @json($citasPorPaciente ?? []);
+    const citaSeleccionada = @json(old('cita_id', $diagnostico->cita_id));
+    function refrescarCitasSeleccion() {
+        const selP = document.getElementById('selectPacienteDiagnostico');
+        const selC = document.getElementById('selectCitaDiagnostico');
+        if (!selP || !selC) return;
+        const pid = selP.value;
+        selC.innerHTML = '<option value="">— Sin vincular —</option>';
+        (citasPorPaciente[pid] || []).forEach(function (c) {
+            const o = document.createElement('option');
+            o.value = c.id;
+            o.textContent = c.label + (c.estado ? ' · ' + c.estado : '');
+            selC.appendChild(o);
+        });
+        if (citaSeleccionada != null && String(citaSeleccionada) !== '') {
+            selC.value = String(citaSeleccionada);
+        }
+    }
+    document.getElementById('selectPacienteDiagnostico')?.addEventListener('change', refrescarCitasSeleccion);
+    document.addEventListener('DOMContentLoaded', refrescarCitasSeleccion);
+</script>
 
 </body>
 </html>

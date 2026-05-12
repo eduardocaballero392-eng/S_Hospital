@@ -6,7 +6,6 @@
     <title>E&M Laboratorio | Panel Médico</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -41,7 +40,6 @@
                 <i class="fas fa-users"></i>
                 <span>Mis pacientes</span>
             </a>
-          
             <a href="{{ route('medico.diagnosticos') }}" class="nav-item">
                 <i class="fas fa-file-alt"></i>
                 <span>Diagnósticos</span>
@@ -50,7 +48,6 @@
                 <i class="fas fa-history"></i>
                 <span>Historial clínico</span>
             </a>
-            
         </nav>
 
         <div class="sidebar-footer">
@@ -66,13 +63,12 @@
 
     {{-- MAIN CONTENT --}}
     <main class="main-content">
-        {{-- HEADER MÉDICO --}}
         <div class="medico-header">
             <div class="medico-info">
-                <div class="medico-avatar">{{ strtoupper(substr($usuario->nombre ?? 'D', 0, 1)) }}</div>
+                <div class="medico-avatar">{{ strtoupper(substr(($medico?->nombre ?: $usuario->nombre) ?? 'D', 0, 1)) }}</div>
                 <div class="medico-datos">
-                    <h1>Dr. {{ $usuario->nombre ?? 'Ramírez López' }}</h1>
-                    <span class="medico-especialidad">{{ $medico?->especialidad?->nombre ?? 'MÉDICO' }}</span>
+                    <h1>Dr. {{ $medico?->nombreParaMostrar() ?: ($usuario->nombre ?? 'Médico') }}</h1>
+                    <span class="medico-especialidad">{{ ($medico && $medico->especialidadParaMostrar() !== '') ? $medico->especialidadParaMostrar() : 'Medicina General' }}</span>
                 </div>
             </div>
             <div class="medico-fecha">
@@ -81,302 +77,234 @@
             </div>
         </div>
 
-        {{-- WELCOME BANNER --}}
-        <div class="welcome-banner">
-            <div class="welcome-text">
-                <h1>¡Hola, {{ $usuario->nombre ?? 'Dr. Ramírez' }}! </h1>
-                <p>{{ now()->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY') }}</p>
-            </div>
-            <div class="welcome-stats">
-                <div class="stat-card">
-                    <div class="stat-number">{{ isset($citasHoy) ? count($citasHoy) : 0 }}</div>
-                    <div class="stat-label">Citas hoy</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">{{ isset($citasPendientes) ? count($citasPendientes) : 0 }}</div>
-                    <div class="stat-label">Pendientes</div>
-                </div>
-            </div>
-        </div>
-
-        {{-- STATS GRID --}}
+        {{-- TARJETAS DE ESTADÍSTICAS --}}
         <div class="stats-grid">
-            <div class="stat-item">
+            <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
                 <div>
-                    <div class="stat-number">{{ isset($citasHoy) ? count($citasHoy) : 0 }}</div>
+                    <div class="stat-number">{{ $citasHoyCount ?? 0 }}</div>
                     <div class="stat-label">Citas hoy</div>
                 </div>
             </div>
-            <div class="stat-item">
+            <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-clock"></i></div>
                 <div>
-                    <div class="stat-number">{{ isset($citasPendientes) ? count($citasPendientes) : 0 }}</div>
-                    <div class="stat-label">Pendientes</div>
+                    <div class="stat-number">{{ $citasPendientesCount ?? 0 }}</div>
+                    <div class="stat-label">Citas pendientes</div>
                 </div>
             </div>
-            <div class="stat-item">
+            <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-users"></i></div>
                 <div>
                     <div class="stat-number">{{ $totalPacientes ?? 0 }}</div>
                     <div class="stat-label">Pacientes atendidos</div>
                 </div>
             </div>
-            <div class="stat-item">
-                <div class="stat-icon"><i class="fas fa-stethoscope"></i></div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-file-medical"></i></div>
                 <div>
-                    <div class="stat-number">{{ $medico?->especialidad?->nombre ?? 'Medicina General' }}</div>
-                    <div class="stat-label">Especialidad</div>
+                    <div class="stat-number">{{ $totalDiagnosticos ?? 0 }}</div>
+                    <div class="stat-label">Diagnósticos</div>
                 </div>
             </div>
         </div>
 
-        {{-- TWO COLUMNS GRID --}}
-        <div class="two-columns-grid">
-            {{-- PACIENTES PROGRAMADOS --}}
-            <div class="panel-pacientes">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <i class="fas fa-users"></i> Pacientes programados
-                        <span class="fecha-actual">{{ now()->locale('es')->isoFormat('dddd, D [de] MMMM') }}</span>
-                    </div>
-                    <div class="buscador-paciente">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="buscadorPacientes" placeholder="Buscar por nombre o DNI...">
-                    </div>
-                </div>
+        {{-- SECCIÓN DE CITAS DE HOY --}}
+        <div class="section-header">
+            <h2><i class="fas fa-calendar-day"></i> Citas del día</h2>
+        </div>
 
-                <div class="lista-pacientes-container">
-                    @if(!isset($citasHoy) || count($citasHoy) === 0)
-                        <div class="empty-pacientes">
-                            <i class="fas fa-calendar-day"></i>
-                            <p>No hay citas programadas para hoy</p>
-                            <span>Tu agenda está libre</span>
-                        </div>
-                    @else
-                        @foreach($citasHoy as $index => $cita)
-                        <div class="paciente-card" data-nombre="{{ strtolower($cita->paciente->nombre ?? '') }} {{ strtolower($cita->paciente->apellido ?? '') }}" data-dni="{{ $cita->paciente->DNI ?? '' }}">
-                            <div class="paciente-hora">
-                                <div class="hora-main">{{ \Carbon\Carbon::parse($cita->fecha_hora)->format('H:i') }}</div>
-                                @if($index == 0 && $cita->estado == 'pendiente')
-                                    <span class="estado-ahora">AHORA</span>
-                                @endif
-                            </div>
-                            <div class="paciente-info">
-                                <div class="paciente-nombre">{{ $cita->paciente->nombre ?? 'Paciente' }} {{ $cita->paciente->apellido ?? '' }}</div>
-                                <div class="paciente-detalles">
-                                    <span><i class="fas fa-id-card"></i> {{ $cita->paciente->DNI ?? 'N/A' }}</span>
-                                </div>
-                            </div>
-                            <button class="btn-atender" onclick="atenderPaciente({{ $cita->id }}, '{{ addslashes($cita->paciente->nombre ?? 'Paciente') }}')">
-                                <i class="fas fa-user-md"></i> Atender
-                            </button>
-                        </div>
-                        @endforeach
-                    @endif
-                </div>
-            </div>
-
-            {{-- TIEMPOS DE ESPERA --}}
-            <div class="panel-espera">
-                <div class="panel-header">
-                    <div class="panel-title">
-                        <i class="fas fa-clock"></i> Estado actual de consulta
+        <div class="citas-container">
+            @if(isset($citasHoyList) && count($citasHoyList) > 0)
+                @foreach($citasHoyList as $cita)
+                <div class="cita-card-hoy">
+                    <div class="cita-hora">
+                        <div class="hora">{{ \Carbon\Carbon::parse($cita->fecha_hora)->format('H:i') }}</div>
                     </div>
-                    <div class="refresh-btn" onclick="actualizarEstado()">
-                        <i class="fas fa-sync-alt"></i>
-                    </div>
-                </div>
-
-                <div class="paciente-actual-card">
-                    <div class="paciente-actual-header">ATENDIENDO AHORA</div>
-                    @php
-                        $citaActualNombre = 'Ninguno';
-                        $citaActualHora = '--:--';
-                        if(isset($citasHoy) && !empty($citasHoy)) {
-                            foreach($citasHoy as $cita) {
-                                if($cita->estado == 'atendiendo') {
-                                    $citaActualNombre = ($cita->paciente->nombre ?? 'Paciente') . ' ' . ($cita->paciente->apellido ?? '');
-                                    $citaActualHora = \Carbon\Carbon::parse($cita->fecha_hora)->format('H:i');
-                                    break;
-                                }
-                            }
-                        }
-                    @endphp
-                    <div class="actual-nombre">{{ $citaActualNombre }}</div>
-                    <div class="actual-hora">{{ $citaActualHora }}</div>
-                    <div class="tiempo-transcurrido">Tiempo en consulta: <span id="tiempoActual">00:00</span></div>
-                </div>
-
-                <div class="lista-espera-card">
-                    <div class="lista-espera-header">
-                        <span>PACIENTES EN ESPERA</span>
-                        <span class="contador-espera" id="contadorEspera">0</span>
-                    </div>
-                    @php
-                        $contador = 1;
-                        $citasEnEspera = [];
-                        if(isset($citasHoy) && !empty($citasHoy)) {
-                            foreach($citasHoy as $cita) {
-                                if($cita->estado == 'pendiente') {
-                                    $citasEnEspera[] = $cita;
-                                }
-                            }
-                        }
-                    @endphp
-                    @foreach($citasEnEspera as $cita)
-                        <div class="espera-item">
-                            <div class="espera-numero">{{ $contador++ }}</div>
-                            <div class="espera-info">
-                                <div class="espera-nombre">{{ $cita->paciente->nombre ?? 'Paciente' }} {{ $cita->paciente->apellido ?? '' }}</div>
-                                <div class="espera-hora">{{ \Carbon\Carbon::parse($cita->fecha_hora)->format('H:i') }}</div>
-                            </div>
-                            <div class="espera-tiempo">Espera: <span id="espera-{{ $cita->id }}">calculando...</span></div>
-                        </div>
-                    @endforeach
-                    @if(empty($citasEnEspera))
-                        <div class="no-espera">No hay pacientes en espera</div>
-                    @endif
-                </div>
-
-                <div class="estimacion-card">
-                    <i class="fas fa-chart-line"></i>
-                    <div class="estimacion-info">
-                        <div class="estimacion-label">Tiempo estimado de espera</div>
-                        <div class="estimacion-valor" id="estimacionEspera">
-                            @php $enEspera = isset($citasEnEspera) ? count($citasEnEspera) : 0; @endphp
-                            @if($enEspera > 0) ~{{ $enEspera * 15 }} minutos @else Sin espera @endif
+                    <div class="cita-info">
+                        <div class="paciente-nombre">{{ $cita->paciente?->nombre ?? 'Paciente' }} {{ $cita->paciente?->apellido ?? '' }}</div>
+                        <div class="cita-motivo">{{ $cita->motivo ?? 'Consulta general' }}</div>
+                        <div class="cita-detalles">
+                            <span><i class="fas fa-id-card"></i> {{ $cita->paciente?->DNI ?? 'N/A' }}</span>
+                            <span><i class="fas fa-phone"></i> {{ $cita->paciente?->telefono ?? 'N/A' }}</span>
+                            <span class="cita-estado-badge"><i class="fas fa-info-circle"></i> {{ ucfirst($cita->estado ?? 'pendiente') }}</span>
                         </div>
                     </div>
+                    <div class="cita-acciones">
+                        <button class="btn-atender" onclick="atenderCita({{ $cita->id }})">
+                            <i class="fas fa-user-md"></i> Atender
+                        </button>
+                        <button class="btn-ver-paciente" onclick="verPaciente({{ $cita->paciente?->id ?? 0 }})">
+                            <i class="fas fa-history"></i> Historial
+                        </button>
+                    </div>
                 </div>
+                @endforeach
+            @else
+                <div class="empty-citas">
+                    <i class="fas fa-calendar-day"></i>
+                    <p>No hay citas programadas para hoy</p>
+                    <span>Tu agenda está libre</span>
+                </div>
+            @endif
+        </div>
 
-                <div class="control-buttons">
-                    <button class="btn-iniciar-consulta" onclick="iniciarConsulta()">
-                        <i class="fas fa-play"></i> Iniciar consulta
-                    </button>
-                    <button class="btn-finalizar-consulta" onclick="finalizarConsulta()">
-                        <i class="fas fa-check"></i> Finalizar
-                    </button>
-                    <button class="btn-llamar" onclick="llamarSiguiente()">
-                        <i class="fas fa-bell"></i> Llamar siguiente
-                    </button>
+        {{-- ACCIONES RÁPIDAS --}}
+        <div class="section-header">
+            <h2><i class="fas fa-bolt"></i> Acciones rápidas</h2>
+        </div>
+        <div class="acciones-grid">
+            <a href="{{ route('medico.citas') }}" class="accion-card">
+                <div class="accion-icon"><i class="fas fa-calendar-alt"></i></div>
+                <div class="accion-info">
+                    <div class="accion-title">Ver todas las citas</div>
+                    <div class="accion-desc">Gestiona tus citas pendientes y futuras</div>
                 </div>
-            </div>
+                <div class="accion-arrow"><i class="fas fa-arrow-right"></i></div>
+            </a>
+            <a href="{{ route('medico.pacientes') }}" class="accion-card">
+                <div class="accion-icon"><i class="fas fa-users"></i></div>
+                <div class="accion-info">
+                    <div class="accion-title">Mis pacientes</div>
+                    <div class="accion-desc">Consulta el listado de tus pacientes</div>
+                </div>
+                <div class="accion-arrow"><i class="fas fa-arrow-right"></i></div>
+            </a>
+            <a href="{{ route('medico.diagnosticos') }}" class="accion-card">
+                <div class="accion-icon"><i class="fas fa-file-alt"></i></div>
+                <div class="accion-info">
+                    <div class="accion-title">Registrar diagnóstico</div>
+                    <div class="accion-desc">Agrega un nuevo diagnóstico a un paciente</div>
+                </div>
+                <div class="accion-arrow"><i class="fas fa-arrow-right"></i></div>
+            </a>
         </div>
     </main>
 </div>
 
 <script>
-    let tiempoInicioConsulta = null;
-    let timerInterval = null;
-
-    function filtrarPacientes() {
-        const input = document.getElementById('buscadorPacientes');
-        if (!input) return;
-        const filter = input.value.toLowerCase();
-        const cards = document.querySelectorAll('.paciente-card');
-        cards.forEach(card => {
-            const nombre = card.getAttribute('data-nombre') || '';
-            const dni = card.getAttribute('data-dni') || '';
-            card.style.display = (nombre.includes(filter) || dni.includes(filter)) ? 'flex' : 'none';
-        });
-    }
-
-    function atenderPaciente(citaId, pacienteNombre) {
-        if (confirm(`¿Iniciar consulta con ${pacienteNombre}?`)) {
-            fetch(`/medico/citas/${citaId}/atender`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content } })
-            .then(response => response.json()).then(data => {
-                if (data.success) { mostrarNotificacion(`Consulta iniciada con ${pacienteNombre}`, 'success'); iniciarTimerConsulta(); setTimeout(() => location.reload(), 1000); }
-                else { mostrarNotificacion('Error al iniciar la consulta', 'error'); }
-            }).catch(() => mostrarNotificacion('Error al conectar con el servidor', 'error'));
+    function atenderCita(citaId) {
+        if (confirm('¿Iniciar atención de esta cita?')) {
+            fetch(`/medico/citas/${citaId}/atender`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    alert('Cita iniciada correctamente');
+                    location.reload();
+                } else {
+                    alert('Error al iniciar la cita');
+                }
+            });
         }
     }
 
-    function iniciarConsulta() {
-        const primerBoton = document.querySelector('.paciente-card:not([style*="display: none"]) .btn-atender');
-        if (primerBoton) primerBoton.click();
-        else mostrarNotificacion('No hay pacientes pendientes para atender', 'info');
-    }
-
-    function finalizarConsulta() {
-        if (confirm('¿Finalizar la consulta actual?')) {
-            fetch('/medico/citas/finalizar', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content } })
-            .then(response => response.json()).then(data => {
-                if (data.success) { detenerTimerConsulta(); mostrarNotificacion('Consulta finalizada correctamente', 'success'); setTimeout(() => location.reload(), 1000); }
-                else { mostrarNotificacion('Error al finalizar la consulta', 'error'); }
-            }).catch(() => mostrarNotificacion('Error al conectar con el servidor', 'error'));
+    function verPaciente(pacienteId) {
+        if (pacienteId) {
+            window.location.href = `/medico/historial?paciente=${pacienteId}`;
         }
     }
-
-    function llamarSiguiente() {
-        const esperaItems = document.querySelectorAll('.espera-item');
-        if (esperaItems.length > 0) {
-            const siguiente = esperaItems[0];
-            const nombre = siguiente.querySelector('.espera-nombre')?.innerText || 'Paciente';
-            mostrarNotificacion(`🔔 Llamando a: ${nombre}`, 'success');
-        } else { mostrarNotificacion('No hay pacientes en espera', 'info'); }
-    }
-
-    function actualizarEstado() { location.reload(); }
-
-    function mostrarNotificacion(mensaje, tipo = 'info') {
-        const notificacion = document.createElement('div');
-        notificacion.className = `notificacion-flotante ${tipo}`;
-        notificacion.innerHTML = `<i class="fas ${tipo === 'success' ? 'fa-check-circle' : tipo === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i><span>${mensaje}</span>`;
-        document.body.appendChild(notificacion);
-        setTimeout(() => notificacion.classList.add('show'), 10);
-        setTimeout(() => { notificacion.classList.remove('show'); setTimeout(() => notificacion.remove(), 300); }, 3000);
-    }
-
-    function iniciarTimerConsulta() {
-        if (timerInterval) clearInterval(timerInterval);
-        tiempoInicioConsulta = new Date();
-        const tiempoSpan = document.getElementById('tiempoActual');
-        if (tiempoSpan) {
-            timerInterval = setInterval(() => {
-                const ahora = new Date();
-                const diff = Math.floor((ahora - tiempoInicioConsulta) / 1000);
-                const minutos = Math.floor(diff / 60);
-                const segundos = diff % 60;
-                tiempoSpan.innerText = `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
-            }, 1000);
-        }
-    }
-
-    function detenerTimerConsulta() { if (timerInterval) { clearInterval(timerInterval); timerInterval = null; } }
-
-    function actualizarTiemposEspera() {
-        const esperaItems = document.querySelectorAll('.espera-item');
-        esperaItems.forEach((item, index) => {
-            const tiempoSpan = item.querySelector('.espera-tiempo span');
-            if (tiempoSpan) tiempoSpan.innerText = `${(index + 1) * 15} min aprox`;
-        });
-        const contadorSpan = document.getElementById('contadorEspera');
-        if (contadorSpan) contadorSpan.innerText = esperaItems.length;
-        const estimacionSpan = document.getElementById('estimacionEspera');
-        if (estimacionSpan) estimacionSpan.innerText = esperaItems.length > 0 ? `~${esperaItems.length * 15} minutos` : 'Sin espera';
-    }
-
-    document.getElementById('buscadorPacientes')?.addEventListener('keyup', filtrarPacientes);
-    actualizarTiemposEspera();
-    setInterval(actualizarTiemposEspera, 30000);
-    const pacienteActualNombre = document.querySelector('.paciente-actual-card .actual-nombre')?.innerText;
-    if (pacienteActualNombre && pacienteActualNombre !== 'Ninguno') iniciarTimerConsulta();
 </script>
 
 <style>
-    .notificacion-flotante {
-        position: fixed; top: 20px; right: 20px; background: white; border-radius: 12px; padding: 12px 20px;
-        display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); z-index: 1000;
-        transform: translateX(400px); transition: transform 0.3s ease; font-family: 'Outfit', sans-serif;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body.medico-dash {
+        background: #f0f4f8;
+        font-family: 'Outfit', sans-serif;
     }
-    .notificacion-flotante.show { transform: translateX(0); }
-    .notificacion-flotante.success { border-left: 4px solid #0d9e75; }
-    .notificacion-flotante.success i { color: #0d9e75; }
-    .notificacion-flotante.info { border-left: 4px solid #1a5fa8; }
-    .notificacion-flotante.info i { color: #1a5fa8; }
-    .notificacion-flotante.error { border-left: 4px solid #ef4444; }
-    .notificacion-flotante.error i { color: #ef4444; }
+
+    .dashboard-layout {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+        width: 280px;
+        background: linear-gradient(180deg, #1a2a3a 0%, #0f1a24 100%);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+    }
+
+    .sidebar-logo { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #1a5fa8, #0d9e75); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+    .logo-main { font-size: 1.2rem; font-weight: 700; font-family: 'Playfair Display', serif; color: white; }
+    .logo-sub { font-size: 0.65rem; color: #0d9e75; text-transform: uppercase; }
+
+    .sidebar-nav { flex: 1; padding: 1rem 0; }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 0.8rem 1.5rem; color: rgba(255,255,255,0.7); text-decoration: none; transition: all 0.2s; }
+    .nav-item i { width: 22px; }
+    .nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+    .nav-item.active { background: rgba(13,158,117,0.2); border-left: 3px solid #0d9e75; color: white; }
+
+    .sidebar-footer { padding: 1rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    .logout-btn { width: 100%; display: flex; align-items: center; gap: 12px; background: none; border: none; color: rgba(255,255,255,0.7); padding: 0.8rem; border-radius: 10px; cursor: pointer; }
+    .logout-btn:hover { background: rgba(239,68,68,0.2); color: #ef4444; }
+
+    /* MAIN CONTENT */
+    .main-content { flex: 1; padding: 2rem; }
+    .medico-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .medico-info { display: flex; align-items: center; gap: 1rem; }
+    .medico-avatar { width: 60px; height: 60px; background: linear-gradient(135deg, #1a5fa8, #0d9e75); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; color: white; }
+    .medico-datos h1 { font-size: 1.3rem; font-weight: 700; color: #1a2a3a; }
+    .medico-especialidad { font-size: 0.7rem; color: #0d9e75; text-transform: uppercase; }
+    .medico-fecha { background: white; padding: 0.5rem 1rem; border-radius: 30px; font-size: 0.8rem; color: #1a5fa8; }
+
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: white; border-radius: 16px; padding: 1rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .stat-icon { width: 45px; height: 45px; background: rgba(26,95,168,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #1a5fa8; }
+    .stat-number { font-size: 1.3rem; font-weight: 800; color: #1a2a3a; }
+    .stat-label { font-size: 0.65rem; color: #64748b; }
+
+    /* CITAS DEL DÍA */
+    .section-header { margin-bottom: 1rem; }
+    .section-header h2 { font-size: 1rem; font-weight: 600; color: #1a2a3a; }
+    .section-header i { color: #1a5fa8; margin-right: 8px; }
+
+    .citas-container { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+    .cita-card-hoy { background: white; border-radius: 16px; padding: 1rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.2s; }
+    .cita-card-hoy:hover { transform: translateX(5px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .cita-hora { min-width: 80px; text-align: center; }
+    .hora { font-size: 1.2rem; font-weight: 700; color: #1a5fa8; }
+    .cita-info { flex: 1; }
+    .paciente-nombre { font-weight: 700; font-size: 0.95rem; color: #1a2a3a; }
+    .cita-motivo { font-size: 0.75rem; color: #64748b; margin-bottom: 4px; }
+    .cita-detalles { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; font-size: 0.7rem; color: #94a3b8; }
+    .cita-estado-badge { color: #1a5fa8; font-weight: 600; }
+    .cita-acciones { display: flex; gap: 0.5rem; }
+    .btn-atender { background: linear-gradient(135deg, #1a5fa8, #0d9e75); border: none; padding: 0.5rem 1rem; border-radius: 8px; color: white; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
+    .btn-ver-paciente { background: #f1f5f9; border: none; padding: 0.5rem 1rem; border-radius: 8px; color: #1a5fa8; cursor: pointer; font-size: 0.75rem; font-weight: 600; }
+
+    /* ACCIONES RÁPIDAS */
+    .acciones-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .accion-card { background: white; border-radius: 16px; padding: 1rem; display: flex; align-items: center; gap: 1rem; text-decoration: none; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .accion-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(26,95,168,0.1); }
+    .accion-icon { width: 50px; height: 50px; background: rgba(13,158,117,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #0d9e75; }
+    .accion-info { flex: 1; }
+    .accion-title { font-size: 0.85rem; font-weight: 700; color: #1a2a3a; }
+    .accion-desc { font-size: 0.65rem; color: #64748b; }
+    .accion-arrow { color: #cbd5e1; }
+
+    .empty-citas { text-align: center; padding: 2rem; background: white; border-radius: 16px; }
+    .empty-citas i { font-size: 2rem; color: #cbd5e1; margin-bottom: 0.5rem; }
+
+    @media (max-width: 900px) {
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .acciones-grid { grid-template-columns: 1fr; }
+        .sidebar { width: 70px; }
+        .sidebar .logo-text, .sidebar .nav-item span, .sidebar .logout-btn span { display: none; }
+        .main-content { padding: 1rem; }
+    }
 </style>
 
 </body>

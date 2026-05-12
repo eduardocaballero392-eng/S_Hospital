@@ -59,13 +59,31 @@
 
                 <div class="form-group">
                     <label><i class="fas fa-user"></i> Paciente</label>
-                    <select name="paciente_id" class="form-control" required>
+                    <select name="paciente_id" id="selectPacienteDiagnostico" class="form-control" required>
                         <option value="">Seleccione un paciente</option>
                         @foreach($pacientes as $paciente)
-                            <option value="{{ $paciente->id }}" {{ $pacienteId == $paciente->id ? 'selected' : '' }}>
+                            <option value="{{ $paciente->id }}" {{ (int) old('paciente_id', $pacienteId) === (int) $paciente->id ? 'selected' : '' }}>
                                 {{ $paciente->nombre }} {{ $paciente->apellido ?? '' }} - {{ $paciente->DNI ?? 'Sin DNI' }}
                             </option>
                         @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-link"></i> Vincular a cita agendada (opcional)</label>
+                    <select name="cita_id" id="selectCitaDiagnostico" class="form-control">
+                        <option value="">— Sin vincular —</option>
+                    </select>
+                    <small style="color:#64748b;font-size:0.75rem;">Incluye citas creadas desde la web del laboratorio.</small>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Tipo</label>
+                    @php $tipoOld = old('tipo', 'preventivo'); @endphp
+                    <select name="tipo" class="form-control">
+                        <option value="preventivo" {{ $tipoOld === 'preventivo' ? 'selected' : '' }}>Preventivo</option>
+                        <option value="agudo" {{ $tipoOld === 'agudo' ? 'selected' : '' }}>Agudo</option>
+                        <option value="cronico" {{ $tipoOld === 'cronico' ? 'selected' : '' }}>Crónico</option>
                     </select>
                 </div>
 
@@ -76,7 +94,7 @@
 
                 <div class="form-group">
                     <label><i class="fas fa-calendar-alt"></i> Fecha del diagnóstico</label>
-                    <input type="date" name="fecha_diagnostico" class="form-control" value="{{ date('Y-m-d') }}" required>
+                    <input type="date" name="fecha_diagnostico" class="form-control" value="{{ old('fecha_diagnostico', date('Y-m-d')) }}" required>
                 </div>
 
                 <div class="form-group">
@@ -182,6 +200,31 @@
         box-shadow: 0 4px 12px rgba(26, 95, 168, 0.3);
     }
 </style>
+
+<script>
+    const citasPorPaciente = @json($citasPorPaciente ?? []);
+    const citaInicial = @json(old('cita_id'));
+    function refrescarCitasSeleccion() {
+        const selP = document.getElementById('selectPacienteDiagnostico');
+        const selC = document.getElementById('selectCitaDiagnostico');
+        if (!selP || !selC) return;
+        const pid = selP.value;
+        const prev = selC.value;
+        selC.innerHTML = '<option value="">— Sin vincular —</option>';
+        (citasPorPaciente[pid] || []).forEach(function (c) {
+            const o = document.createElement('option');
+            o.value = c.id;
+            o.textContent = c.label + (c.estado ? ' · ' + c.estado : '');
+            selC.appendChild(o);
+        });
+        const prefer = prev || (citaInicial != null && String(citaInicial) !== '' ? String(citaInicial) : '');
+        if (prefer && Array.from(selC.options).some(function (opt) { return opt.value === prefer; })) {
+            selC.value = prefer;
+        }
+    }
+    document.getElementById('selectPacienteDiagnostico')?.addEventListener('change', refrescarCitasSeleccion);
+    document.addEventListener('DOMContentLoaded', refrescarCitasSeleccion);
+</script>
 
 </body>
 </html>
